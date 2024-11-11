@@ -24,10 +24,10 @@ const SignUpForm = () => {
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="username"
-              placeholder="Enter your username"
+              id="email"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

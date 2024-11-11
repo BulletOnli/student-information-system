@@ -11,8 +11,8 @@ const SignInForm = () => {
       }}
     >
       <label>
-        Username
-        <input name="email" type="text" />
+        Email
+        <input name="email" type="email" />
       </label>
       <label>
         Password
