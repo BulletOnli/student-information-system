@@ -6,7 +6,7 @@ const Homepage = async () => {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   return <div>Hello, {session?.user.email}</div>;

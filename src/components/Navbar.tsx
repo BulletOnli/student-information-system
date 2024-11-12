@@ -1,10 +1,9 @@
-"use client";
 import React from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { auth, signOut } from "@/auth";
 
-const Navbar = () => {
-  const { data: session } = useSession();
+const Navbar = async () => {
+  const session = await auth();
 
   return (
     <nav className="fixed top-0 w-full bg-background border-b ">
@@ -17,25 +16,29 @@ const Navbar = () => {
           </div>
           <div className="hidden md:block">
             {session?.user ? (
-              <button
-                className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium "
-                onClick={() => signOut({ redirectTo: "/sign-in" })}
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut();
+                }}
               >
-                Logout
-              </button>
+                <button className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium ">
+                  Logout
+                </button>
+              </form>
             ) : (
               <>
                 <Link
-                  href="/sign-in"
+                  href="/login"
                   className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Sign In
+                  Login
                 </Link>
                 <Link
-                  href="/sign-up"
+                  href="/register"
                   className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Sign Up
+                  Register
                 </Link>
               </>
             )}

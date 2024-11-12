@@ -14,10 +14,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  STUDENT
+  FACULTY
+  ADMIN
+}
+
+enum Course {
+  BSIT
+  BSA
+  BSBA
+  BSHM
+  BSED
+}
+
 model User {
-  id       String @id @default(cuid())
-  email    String
-  password String
+  id        String   @id @default(cuid())
+  email     String
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole @default(STUDENT)
+  course    Course?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

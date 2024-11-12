@@ -8,6 +8,9 @@ import { signInSchema } from "./lib/zod";
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     Credentials({
       name: "Credentials",
