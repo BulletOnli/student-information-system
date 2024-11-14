@@ -1,9 +1,10 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./lib/prisma";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
 import { signInSchema } from "./lib/zod";
+import * as argon2 from "argon2";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -25,14 +26,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           );
 
           const user = await prisma.user.findFirst({
-            where: {
-              email,
-              password,
-            },
+            where: { email },
           });
 
-          if (!user) {
-            console.log("user not found");
+          if (!user) return null;
+
+          // Verify the password
+          const isPasswordValid = await argon2.verify(user.password, password);
+          if (!isPasswordValid) {
+            console.log("Invalid password");
             return null;
           }
 
@@ -42,10 +44,44 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (error instanceof ZodError) {
             return null;
           }
-
           return null;
         }
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token }) {
+      if (token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            role: true,
+          },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.firstName = dbUser.firstName;
+          token.lastName = dbUser.lastName;
+          token.role = dbUser.role;
+        }
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.name = `${token.firstName} ${token.lastName}`;
+        session.user.id = token.id as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
+        session.user.role = token.role as string;
+      }
+
+      return session;
+    },
+  },
 });

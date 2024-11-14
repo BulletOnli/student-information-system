@@ -31,6 +31,7 @@ import { signUpAction } from "../../action";
 import { useServerAction } from "zsa-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export const registerFormSchema = z
   .object({
@@ -62,7 +63,7 @@ const RegisterForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      role: "FACULTY",
+      role: "ADMIN",
     },
   });
 
@@ -76,10 +77,19 @@ const RegisterForm = () => {
     });
 
     if (err) {
-      return console.log("Error creating user", err);
+      console.error(err);
+      if (err.message.includes("Email")) {
+        form.setError("email", { message: err.message });
+      }
+      toast({
+        title: "Error",
+        description: err.message,
+        variant: "destructive",
+      });
+      return;
     }
 
-    signIn("credentials", data);
+    signIn("credentials", { email: data.email, password: values.password });
   };
 
   return (
@@ -178,6 +188,7 @@ const RegisterForm = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled
                   >
                     <FormControl>
                       <SelectTrigger>

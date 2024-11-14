@@ -6,7 +6,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  previewFeatures = ["driverAdapters", "fullTextSearch", "omitApi"]
 }
 
 datasource db {
@@ -30,13 +30,39 @@ enum Course {
 
 model User {
   id        String   @id @default(cuid())
-  email     String
+  email     String   @unique
   password  String
   firstName String
   lastName  String
-  role      UserRole @default(STUDENT)
-  course    Course?
+  role      UserRole @default(ADMIN)
+  student   Student?
+  faculty   Faculty?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Student {
+  id            String @id @default(cuid())
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String @unique
+  studentNumber Int
+  course        Course
+  yearLevel     Int
+  section       String
+
+  @@map("students")
+}
+
+model Faculty {
+  id            String @id @default(cuid())
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String @unique
+  facultyNumber Int
+  department    String
+  position      String
+
+  @@map("faculties")
 }

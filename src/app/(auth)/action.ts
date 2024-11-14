@@ -1,29 +1,27 @@
 "use server";
 import { createServerAction } from "zsa";
 import { createUser } from "@/data-access/user";
-import { registerFormSchema } from "./register/_components/RegisterForm";
-import { z } from "zod";
+import { baseUserSchema } from "@/lib/zod";
+import * as argon2 from "argon2";
+import { prisma } from "@/lib/prisma";
 
 export const signUpAction = createServerAction()
-  .input(
-    z.object({
-      email: z.string().email({ message: "Invalid email address" }),
-      password: z
-        .string()
-        .min(8, { message: "Password must be at least 8 characters" }),
-      firstName: z
-        .string()
-        .min(2, { message: "First name must be at least 2 characters" }),
-      lastName: z
-        .string()
-        .min(2, { message: "Last name must be at least 2 characters" }),
-      role: z.enum(["STUDENT", "FACULTY", "ADMIN"], {
-        required_error: "Please select a role",
-      }),
-    })
-  )
+  .input(baseUserSchema)
   .handler(async ({ input }) => {
-    const user = await createUser(input);
+    const isEmailTaken = await prisma.user.findFirst({
+      where: { email: input.email },
+      select: { id: true },
+    });
+
+    if (isEmailTaken) {
+      throw new Error("Email is already taken");
+    }
+
+    const hashedPassword = await argon2.hash(input.password);
+    const user = await createUser({
+      ...input,
+      password: hashedPassword,
+    });
 
     return user;
   });

@@ -1,3 +1,4 @@
+import { COURSES } from "@/constants";
 import z from "zod";
 
 export const signInSchema = z.object({
@@ -11,3 +12,52 @@ export const signInSchema = z.object({
     .min(8, "Password must be more than 8 characters")
     .max(32, "Password must be less than 32 characters"),
 });
+
+// Base user schema
+export const baseUserSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  lastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+  role: z
+    .enum(["ADMIN", "FACULTY", "STUDENT"], {
+      required_error: "Please select a role",
+    })
+    .default("ADMIN"),
+});
+
+// Faculty schema
+export const facultySchema = baseUserSchema.extend({
+  role: z.literal("FACULTY"),
+  facultyNumber: z.string().min(1, { message: "Faculty number is required." }),
+  department: z.string().min(1, { message: "Department is required." }),
+  position: z.string().min(1, { message: "Position is required." }),
+});
+
+// Student schema
+export const studentSchema = baseUserSchema.extend({
+  role: z.literal("STUDENT"),
+  studentNumber: z.string().min(1, { message: "Student number is required." }),
+  course: z.enum(COURSES).default("BSIT"),
+  section: z.string().min(1, { message: "Section is required." }),
+  yearLevel: z.string().min(1, { message: "Year level is required." }),
+});
+
+export const adminSchema = baseUserSchema.extend({
+  role: z.literal("ADMIN"),
+});
+
+// Combined schema
+export const userSchema = z.discriminatedUnion("role", [
+  facultySchema,
+  studentSchema,
+  adminSchema,
+]);
+
+export type User = z.infer<typeof userSchema>;
