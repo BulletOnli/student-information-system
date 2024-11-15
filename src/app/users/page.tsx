@@ -3,12 +3,17 @@ import UsersTable from "./_components/UsersTable";
 import CreateUserModal from "./_components/CreateUserModal";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { UserRole } from "@prisma/client";
 
 const ManageUsers = async () => {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/login");
+  }
+
+  if (session.user.role !== UserRole.ADMIN) {
+    redirect("/");
   }
 
   return (

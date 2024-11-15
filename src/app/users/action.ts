@@ -43,7 +43,7 @@ export const createUserAction = createServerAction()
     if (input.role === "STUDENT") {
       await createStudent({
         userId: user.id,
-        course: input.course,
+        courseId: input.courseId,
         section: input.section,
         yearLevel: Number(input.yearLevel),
         studentNumber: Number(input.studentNumber),

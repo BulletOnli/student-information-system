@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import GlobalProviders from "@/providers";
 import { Toaster } from "@/components/ui/toaster";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
         <GlobalProviders>
           <Navbar />
           <div className="pt-16 max-w-7xl mx-auto ">{children}</div>
+
           <Toaster />
+          <ReactQueryDevtools initialIsOpen={false} />
         </GlobalProviders>
       </body>
     </html>

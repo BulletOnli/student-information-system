@@ -15,7 +15,7 @@ export const createUser = async (data: RegisterUser) => {
 
 type StudentInfo = {
   userId: string;
-  course: Course;
+  courseId: string;
   section: string;
   yearLevel: number;
   studentNumber: number;

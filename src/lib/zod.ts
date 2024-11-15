@@ -1,6 +1,8 @@
 import { COURSES } from "@/constants";
 import z from "zod";
 
+//* USERS
+
 export const signInSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
@@ -44,7 +46,7 @@ export const facultySchema = baseUserSchema.extend({
 export const studentSchema = baseUserSchema.extend({
   role: z.literal("STUDENT"),
   studentNumber: z.string().min(1, { message: "Student number is required." }),
-  course: z.enum(COURSES).default("BSIT"),
+  courseId: z.string().min(1, { message: "Course is required." }),
   section: z.string().min(1, { message: "Section is required." }),
   yearLevel: z.string().min(1, { message: "Year level is required." }),
 });
@@ -61,3 +63,13 @@ export const userSchema = z.discriminatedUnion("role", [
 ]);
 
 export type User = z.infer<typeof userSchema>;
+
+//* COURSES
+
+export const courseSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  code: z.string(),
+});
+
+export type Course = z.infer<typeof courseSchema>;

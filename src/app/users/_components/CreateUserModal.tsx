@@ -34,6 +34,7 @@ import { useServerAction } from "zsa-react";
 import { createUserAction } from "../action";
 import { userSchema } from "@/lib/zod";
 import { toast } from "@/hooks/use-toast";
+import SelectCourse from "@/components/SelectCourse";
 
 const CreateUserModal = () => {
   const [open, setOpen] = useState(false);
@@ -173,7 +174,7 @@ const CreateUserModal = () => {
             {form.watch("role") === "FACULTY" && <FacultyFields form={form} />}
 
             <Button type="submit" className="w-full" disabled={isPending}>
-              Add Student
+              Add User
             </Button>
           </form>
         </Form>
@@ -206,24 +207,11 @@ const StudentFields = ({ form }: FieldProps) => {
       <div className="w-full grid grid-cols-3 gap-2">
         <FormField
           control={form.control}
-          name="course"
+          name="courseId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Course</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your role" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {COURSES.map((course) => (
-                    <SelectItem key={course} value={course}>
-                      {course}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectCourse {...field} />
               <FormMessage />
             </FormItem>
           )}
