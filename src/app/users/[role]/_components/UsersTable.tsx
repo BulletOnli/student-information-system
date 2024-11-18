@@ -16,6 +16,7 @@ import {
 import { getAllUsers } from "@/data-access/user";
 import { UserRole } from "@prisma/client";
 import ManageUserModal from "./ManageUserModal";
+import DeleteUserModal from "./DeleteUserModal";
 
 type Props = {
   role?: UserRole;
@@ -48,8 +49,9 @@ const UsersTable = async ({ role }: Props) => {
                 <TableCell>{user.lastName}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className="capitalize">{user.role}</TableCell>
-                <TableCell>
+                <TableCell className="space-x-2">
                   <ManageUserModal role={user.role} defaultValues={user} />
+                  <DeleteUserModal userId={user.id} role={user.role} />
                 </TableCell>
               </TableRow>
             ))}

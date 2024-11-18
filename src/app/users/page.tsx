@@ -10,6 +10,9 @@ const UsersPage = () => {
       <Link href="/users/faculty" className="text-blue-600 underline">
         Faculty
       </Link>
+      <Link href="/users/admin" className="text-blue-600 underline">
+        Admin
+      </Link>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   createFaculty,
   createStudent,
   createUser,
+  deleteUser,
   updateFaculty,
   updateStudent,
 } from "@/data-access/user";
@@ -57,7 +58,7 @@ export const createUserAction = createServerAction()
       });
     }
 
-    revalidatePath("/users");
+    revalidatePath(`/users/${user.role.toLowerCase()}`);
     return { id: user.id, email: user.email };
   });
 
@@ -125,6 +126,19 @@ export const updateUserAction = createServerAction()
       });
     }
 
-    revalidatePath("/users");
+    revalidatePath(`/users/${user.role.toLowerCase()}`);
     return { id: user.id, email: user.email };
+  });
+
+export const deleteUserAction = createServerAction()
+  .input(
+    z.object({
+      userId: z.string().min(1),
+      role: z.enum(["STUDENT", "FACULTY", "ADMIN"]),
+    })
+  )
+  .handler(async ({ input }) => {
+    await deleteUser(input.userId);
+
+    revalidatePath(`/users/${input.role.toLowerCase()}`);
   });

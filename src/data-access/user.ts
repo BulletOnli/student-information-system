@@ -84,3 +84,9 @@ export const updateFaculty = async (
 ) => {
   return updateEntity("faculty", data);
 };
+
+export const deleteUser = async (userId: string) => {
+  return await prisma.user.delete({
+    where: { id: userId },
+  });
+};
