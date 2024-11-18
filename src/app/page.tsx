@@ -25,9 +25,12 @@ const Homepage = async () => {
     redirect("/login");
   }
 
-  // return <div>Hello, {session?.user.email}</div>;
   return (
     <div className="w-full p-10">
+      <p>
+        Hi {session.user.role}, {session.user.name}
+      </p>
+
       <div className="flex items-center gap-6">
         {LINKS.map((link) => (
           <Link key={link.href} href={link.href} className="text-blue-500">

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Course } from "@prisma/client";
+import { Course, Prisma, UserRole } from "@prisma/client";
 
 type RegisterUser = {
   firstName: string;
@@ -36,6 +36,51 @@ export const createFaculty = async (data: FacultyInfo) => {
   return await prisma.faculty.create({ data });
 };
 
-export const getAllUsers = async () => {
-  return await prisma.user.findMany();
+const getUserIncludeObject = (role?: UserRole) => {
+  const includes: Prisma.UserInclude = {};
+
+  if (role === UserRole.STUDENT) {
+    includes.student = {
+      include: {
+        course: true,
+      },
+    };
+  }
+
+  return includes;
+};
+
+export const getAllUsers = async (role?: UserRole) => {
+  const queryOptions: Prisma.UserFindManyArgs = {
+    where: role ? { role } : undefined,
+    include: getUserIncludeObject(role),
+  };
+
+  return await prisma.user.findMany(queryOptions);
+};
+
+type EntityType = "user" | "student" | "faculty";
+
+export async function updateEntity<T extends { id: string }>(
+  entityType: EntityType,
+  data: T
+) {
+  const prismaModel = prisma[entityType] as any;
+
+  return await prismaModel.update({
+    where: { id: data.id },
+    data,
+  });
+}
+
+export const updateStudent = async (
+  data: Prisma.StudentUncheckedUpdateInput & { id: string }
+) => {
+  return updateEntity("student", data);
+};
+
+export const updateFaculty = async (
+  data: Prisma.FacultyUncheckedUpdateInput & { id: string }
+) => {
+  return updateEntity("faculty", data);
 };

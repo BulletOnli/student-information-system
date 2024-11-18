@@ -14,9 +14,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getAllUsers } from "@/data-access/user";
+import { UserRole } from "@prisma/client";
+import ManageUserModal from "./ManageUserModal";
 
-const UsersTable = async () => {
-  const users = await getAllUsers();
+type Props = {
+  role?: UserRole;
+};
+
+const UsersTable = async ({ role }: Props) => {
+  const users = await getAllUsers(role);
 
   return (
     <Card>
@@ -42,11 +48,16 @@ const UsersTable = async () => {
                 <TableCell>{user.lastName}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className="capitalize">{user.role}</TableCell>
-                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <ManageUserModal role={user.role} defaultValues={user} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        {users.length === 0 && (
+          <p className="mt-4 text-center text-sm">No users found</p>
+        )}
       </CardContent>
     </Card>
   );

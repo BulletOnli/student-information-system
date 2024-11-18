@@ -1,5 +1,5 @@
 "use client";
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusCircle } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -31,22 +31,96 @@ import {
 } from "@/components/ui/select";
 import { COURSES, DEPARTMENTS, ROLES } from "@/constants";
 import { useServerAction } from "zsa-react";
-import { createUserAction } from "../action";
+import { createUserAction, updateUserAction } from "../../action";
 import { userSchema } from "@/lib/zod";
 import { toast } from "@/hooks/use-toast";
 import SelectCourse from "@/components/SelectCourse";
+import { UserRole } from "@prisma/client";
 
-const CreateUserModal = () => {
+type UserDefaults = {
+  student?: {
+    course: { id: string };
+    yearLevel: number;
+    section: string;
+    studentNumber: number;
+  };
+  faculty?: {
+    department: string;
+    position: string;
+    facultyNumber: number;
+  };
+};
+
+type RoleDefaults = {
+  student: (
+    defaults: NonNullable<UserDefaults["student"]>
+  ) => Record<string, any>;
+  faculty: (
+    defaults: NonNullable<UserDefaults["faculty"]>
+  ) => Record<string, any>;
+};
+
+const formatRoleDefaults: RoleDefaults = {
+  student: (defaults) => ({
+    courseId: defaults.course.id,
+    yearLevel: String(defaults.yearLevel),
+    section: defaults.section,
+    studentNumber: String(defaults.studentNumber),
+  }),
+
+  faculty: (defaults) => ({
+    department: defaults.department,
+    position: defaults.position,
+    facultyNumber: String(defaults.facultyNumber),
+  }),
+};
+
+const getDefaultValues = (
+  role: UserRole | undefined,
+  defaultValues: Props["defaultValues"]
+) => {
+  if (!defaultValues) {
+    return { role: role || UserRole.ADMIN };
+  }
+
+  const roleKey = role?.toLowerCase() as keyof RoleDefaults;
+  if (!roleKey || !formatRoleDefaults[roleKey]) {
+    return defaultValues;
+  }
+
+  const roleDefaults = defaultValues[roleKey];
+  if (!roleDefaults) {
+    return defaultValues;
+  }
+
+  return {
+    ...defaultValues,
+    ...formatRoleDefaults[roleKey](roleDefaults),
+  };
+};
+
+type Props = {
+  role?: "STUDENT" | "FACULTY" | "ADMIN";
+  defaultValues?: any;
+};
+
+const ManageUserModal = ({ role, defaultValues }: Props) => {
   const [open, setOpen] = useState(false);
-  const { execute, isPending } = useServerAction(createUserAction);
+  const { execute, isPending } = useServerAction(
+    defaultValues ? updateUserAction : createUserAction
+  );
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
-    defaultValues: { role: "ADMIN" },
+    defaultValues: getDefaultValues(role, defaultValues),
   });
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
-    const [data, err] = await execute(values);
+    const updatedValues = defaultValues
+      ? { ...values, userId: defaultValues.id }
+      : values;
+
+    const [data, err] = await execute(updatedValues);
     if (err) {
       console.error(err);
       if (err.message.includes("Email")) {
@@ -63,17 +137,26 @@ const CreateUserModal = () => {
     setOpen(false);
     form.reset();
     toast({
-      title: "User created",
-      description: "User has been created successfully.",
+      title: defaultValues ? "User updated successfully" : "User created",
+      description: `User has been ${
+        defaultValues ? "updated" : "created"
+      } successfully.`,
     });
   };
+
+  const isStudent = form.watch("role") === "STUDENT" || role === "STUDENT";
+  const isFaculty = form.watch("role") === "FACULTY" || role === "FACULTY";
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add User
+        <Button variant="outline">
+          {defaultValues ? (
+            <Pencil className="size-4" />
+          ) : (
+            <PlusCircle className="mr-1 size-4" />
+          )}
+          {!defaultValues && "Add User"}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -151,6 +234,7 @@ const CreateUserModal = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={defaultValues || role !== undefined}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -170,11 +254,11 @@ const CreateUserModal = () => {
               )}
             />
 
-            {form.watch("role") === "STUDENT" && <StudentFields form={form} />}
-            {form.watch("role") === "FACULTY" && <FacultyFields form={form} />}
+            {isStudent && <StudentFields form={form} />}
+            {isFaculty && <FacultyFields form={form} />}
 
             <Button type="submit" className="w-full" disabled={isPending}>
-              Add User
+              {defaultValues ? "Update User" : "Create User"}
             </Button>
           </form>
         </Form>
@@ -308,4 +392,4 @@ const FacultyFields = ({ form }: FieldProps) => {
   );
 };
 
-export default CreateUserModal;
+export default ManageUserModal;
