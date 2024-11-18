@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useServerAction } from "zsa-react";
-import { addCourseAction } from "../action";
+import { addCourseAction, updateCourseAction } from "../action";
 import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -40,21 +40,27 @@ const formSchema = z.object({
   }),
 });
 
-const AddCourseModal = () => {
+type Props = {
+  defaultValues?: z.infer<typeof formSchema> & { id: string };
+};
+
+const ManageCourseModal = ({ defaultValues }: Props) => {
   const [open, setOpen] = useState(false);
-  const { isPending, execute } = useServerAction(addCourseAction);
+  const { isPending, execute } = useServerAction(
+    defaultValues ? updateCourseAction : addCourseAction
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      code: "",
-      title: "",
-      description: "",
-    },
+    defaultValues: defaultValues ? defaultValues : undefined,
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const [data, err] = await execute(values);
+    const updatedValues = defaultValues
+      ? { ...values, id: defaultValues.id }
+      : values;
+
+    const [data, err] = await execute(updatedValues);
 
     if (err) {
       console.error(err);
@@ -78,15 +84,16 @@ const AddCourseModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Course</Button>
+        <Button variant="outline">
+          {defaultValues ? "Edit Course" : "Add Course"}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Course</DialogTitle>
-          <DialogDescription>
-            Enter the details of the new course here. Click save when you're
-            done.
-          </DialogDescription>
+          <DialogTitle>
+            {defaultValues ? "Edit Course" : "Add New Course"}
+          </DialogTitle>
+          <DialogDescription>Fill in the details below.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -148,7 +155,7 @@ const AddCourseModal = () => {
             />
             <DialogFooter>
               <Button type="submit" disabled={isPending}>
-                Save Course
+                {isPending ? "Saving..." : "Save"}
               </Button>
             </DialogFooter>
           </form>
@@ -158,4 +165,4 @@ const AddCourseModal = () => {
   );
 };
 
-export default AddCourseModal;
+export default ManageCourseModal;

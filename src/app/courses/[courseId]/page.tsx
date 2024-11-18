@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { getCourseDetails } from "@/data-access/course";
 import { redirect } from "next/navigation";
 import React from "react";
+import ManageCourseModal from "../_components/ManageCourseModal";
 
 type Props = {
   params: {
@@ -28,6 +29,7 @@ const CourseInfoPage = async ({ params }: Props) => {
       <p>Title: {course.title}</p>
       <p>Code: {course.code}</p>
       <p>Description: {course.description}</p>
+      <ManageCourseModal defaultValues={course} />
 
       <div className="mt-8">
         {course.students.length > 0 ? (

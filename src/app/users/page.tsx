@@ -1,7 +1,15 @@
+import { auth } from "@/auth";
+import { UserRole } from "@prisma/client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const UsersPage = () => {
+const UsersPage = async () => {
+  const session = await auth();
+  if (session?.user?.role !== UserRole.ADMIN) {
+    redirect("/");
+  }
+
   return (
     <div className="space-x-4">
       <Link href="/users/student" className="text-blue-600 underline">
