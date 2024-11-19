@@ -39,7 +39,9 @@ const UsersTable = async ({ role }: Props) => {
               <TableHead>Last Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>Details</TableHead>
+              {role === UserRole.STUDENT && <StudentTableHeader />}
+              {role === UserRole.FACULTY && <FacultyTableHeader />}
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -49,6 +51,12 @@ const UsersTable = async ({ role }: Props) => {
                 <TableCell>{user.lastName}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className="capitalize">{user.role}</TableCell>
+                {role === UserRole.STUDENT && (
+                  <StudentTableRow student={user?.student} />
+                )}
+                {role === UserRole.FACULTY && (
+                  <FacultyTableRow faculty={user?.faculty} />
+                )}
                 <TableCell className="space-x-2">
                   <ManageUserModal role={user.role} defaultValues={user} />
                   <DeleteUserModal userId={user.id} role={user.role} />
@@ -62,6 +70,48 @@ const UsersTable = async ({ role }: Props) => {
         )}
       </CardContent>
     </Card>
+  );
+};
+
+export const StudentTableHeader = () => {
+  return (
+    <>
+      <TableHead>Student #</TableHead>
+      <TableHead>Course</TableHead>
+      <TableHead>Year Level</TableHead>
+      <TableHead>Section</TableHead>
+    </>
+  );
+};
+
+export const StudentTableRow = ({ student }: { student: any }) => {
+  return (
+    <>
+      <TableCell>{student.studentNumber.toString()}</TableCell>
+      <TableCell>{student.course.code}</TableCell>
+      <TableCell>{student.yearLevel}</TableCell>
+      <TableCell>{student.section}</TableCell>
+    </>
+  );
+};
+
+export const FacultyTableHeader = () => {
+  return (
+    <>
+      <TableHead>Faculty #</TableHead>
+      <TableHead>Department</TableHead>
+      <TableHead>Position</TableHead>
+    </>
+  );
+};
+
+export const FacultyTableRow = ({ faculty }: { faculty: any }) => {
+  return (
+    <>
+      <TableCell>{faculty.facultyNumber.toString()}</TableCell>
+      <TableCell>{faculty.department}</TableCell>
+      <TableCell>{faculty.position}</TableCell>
+    </>
   );
 };
 

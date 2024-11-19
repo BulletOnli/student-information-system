@@ -4,6 +4,7 @@ import { getCourseDetails } from "@/data-access/course";
 import { redirect } from "next/navigation";
 import React from "react";
 import ManageCourseModal from "../_components/ManageCourseModal";
+import { UserRole } from "@prisma/client";
 
 type Props = {
   params: {
@@ -16,6 +17,7 @@ const CourseInfoPage = async ({ params }: Props) => {
   if (!session?.user) {
     redirect("/login");
   }
+  const isAdmin = session.user.role === UserRole.ADMIN;
 
   const course = await getCourseDetails(params.courseId);
   if (!course) {
@@ -29,7 +31,7 @@ const CourseInfoPage = async ({ params }: Props) => {
       <p>Title: {course.title}</p>
       <p>Code: {course.code}</p>
       <p>Description: {course.description}</p>
-      <ManageCourseModal defaultValues={course} />
+      {isAdmin && <ManageCourseModal defaultValues={course} />}
 
       <div className="mt-8">
         {course.students.length > 0 ? (

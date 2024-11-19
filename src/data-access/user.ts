@@ -51,12 +51,14 @@ const getUserIncludeObject = (role?: UserRole) => {
 };
 
 export const getAllUsers = async (role?: UserRole) => {
-  const queryOptions: Prisma.UserFindManyArgs = {
+  return await prisma.user.findMany({
     where: role ? { role } : undefined,
-    include: getUserIncludeObject(role),
-  };
-
-  return await prisma.user.findMany(queryOptions);
+    include: {
+      student:
+        role === UserRole.STUDENT ? { include: { course: true } } : undefined,
+      faculty: role === UserRole.FACULTY ? true : undefined,
+    },
+  });
 };
 
 type EntityType = "user" | "student" | "faculty";

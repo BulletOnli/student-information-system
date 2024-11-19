@@ -37,14 +37,15 @@ model User {
 }
 
 model Student {
-  id            String  @id @default(cuid())
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String  @unique
+  id            String       @id @default(cuid())
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String       @unique
   studentNumber BigInt
-  course        Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course        Course?      @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId      String
   yearLevel     Int
   section       String
+  reportCard    ReportCard[]
 
   @@map("students")
 }
@@ -68,4 +69,23 @@ model Course {
   students    Student[]
 
   @@map("courses")
+}
+
+model ReportCard {
+  id        String  @id @default(cuid())
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  grades    Grade[]
+
+  @@map("report_cards")
+}
+
+model Grade {
+  id           String     @id @default(cuid())
+  reportCard   ReportCard @relation(fields: [reportCardId], references: [id], onDelete: Cascade)
+  reportCardId String
+  subject      String
+  grade        Float
+
+  @@map("grades")
 }

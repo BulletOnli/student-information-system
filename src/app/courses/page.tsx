@@ -4,6 +4,7 @@ import ManageCourseModal from "./_components/ManageCourseModal";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { UserRole } from "@prisma/client";
 
 const CoursesPage = async () => {
   const session = await auth();
@@ -17,7 +18,7 @@ const CoursesPage = async () => {
     <div className="p-10">
       <div className="flex items-center gap-8">
         <h1>Courses</h1>
-        <ManageCourseModal />
+        {session.user.role === UserRole.ADMIN && <ManageCourseModal />}
       </div>
       <ul>
         {courses.map((course) => (
