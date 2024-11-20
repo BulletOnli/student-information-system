@@ -4,7 +4,7 @@ import { prisma } from "./lib/prisma";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
 import { signInSchema } from "./lib/zod";
-import * as argon2 from "argon2";
+import bcrypt from "bcrypt";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -32,7 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!user) return null;
 
           // Verify the password
-          const isPasswordValid = await argon2.verify(user.password, password);
+          const isPasswordValid = await bcrypt.compare(password, user.password);
           if (!isPasswordValid) {
             console.log("Invalid password");
             return null;

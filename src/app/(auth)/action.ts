@@ -2,8 +2,8 @@
 import { createServerAction } from "zsa";
 import { createUser } from "@/data-access/user";
 import { baseUserSchema } from "@/lib/zod";
-import * as argon2 from "argon2";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 export const signUpAction = createServerAction()
   .input(baseUserSchema)
@@ -17,7 +17,7 @@ export const signUpAction = createServerAction()
       throw new Error("Email is already taken");
     }
 
-    const hashedPassword = await argon2.hash(input.password);
+    const hashedPassword = await bcrypt.hash(input.password, 10);
     const user = await createUser({
       ...input,
       password: hashedPassword,

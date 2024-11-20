@@ -10,7 +10,7 @@ import {
   updateFaculty,
   updateStudent,
 } from "@/data-access/user";
-import * as argon2 from "argon2";
+import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
@@ -20,7 +20,7 @@ export const createUserAction = createServerAction()
     z.discriminatedUnion("role", [facultySchema, studentSchema, adminSchema])
   )
   .handler(async ({ input }) => {
-    const hashedPassword = await argon2.hash(input.password);
+    const hashedPassword = await bcrypt.hash(input.password, 10);
 
     const isEmailTaken = await prisma.user.findFirst({
       where: { email: input.email },
@@ -74,7 +74,7 @@ export const updateUserAction = createServerAction()
       throw new Error("Unauthorized, please login");
     }
 
-    const hashedPassword = await argon2.hash(input.password);
+    const hashedPassword = await bcrypt.hash(input.password, 10);
 
     const isEmailTaken = await prisma.user.findFirst({
       where: { email: input.email, NOT: { id: input.userId } },
