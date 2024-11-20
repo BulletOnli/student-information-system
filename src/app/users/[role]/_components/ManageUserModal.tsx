@@ -218,7 +218,11 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input
+                      type="password"
+                      {...field}
+                      readOnly={defaultValues}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

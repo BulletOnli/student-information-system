@@ -91,7 +91,7 @@ export const updateUserAction = createServerAction()
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,
-        password: hashedPassword,
+        // password: hashedPassword,
       },
       include: {
         faculty: {
