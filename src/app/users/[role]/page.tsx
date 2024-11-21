@@ -25,7 +25,7 @@ const ManageUsers = async ({ params }: Props) => {
     redirect("/login");
   }
 
-  if (session.user.role === UserRole.ADMIN) {
+  if (session.user.role === UserRole.STUDENT) {
     redirect("/");
   }
 
