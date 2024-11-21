@@ -6,7 +6,7 @@ import React from "react";
 
 const UsersPage = async () => {
   const session = await auth();
-  if (session?.user?.role !== UserRole.ADMIN) {
+  if (session?.user?.role === UserRole.STUDENT) {
     redirect("/");
   }
 
