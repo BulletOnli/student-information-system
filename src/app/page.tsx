@@ -17,7 +17,7 @@ const LINKS = [
   {
     title: "Users",
     href: "/users",
-    allowedRoles: [UserRole.ADMIN] as string[],
+    allowedRoles: [UserRole.ADMIN, UserRole.FACULTY] as string[],
   },
   {
     title: "Courses",

@@ -25,8 +25,17 @@ const ManageUsers = async ({ params }: Props) => {
     redirect("/login");
   }
 
-  if (session.user.role !== UserRole.ADMIN) {
+  // Redirect students to home page if they try to access admin or faculty page
+  if (session.user.role === UserRole.STUDENT) {
     redirect("/");
+  }
+
+  // Redirect faculty to home page if they try to access student or admin page
+  if (
+    session.user.role === UserRole.FACULTY &&
+    params.role.toUpperCase() !== UserRole.STUDENT
+  ) {
+    redirect("/users");
   }
 
   if (!allowedRoles.includes(params.role.toUpperCase())) {
