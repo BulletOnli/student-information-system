@@ -17,6 +17,7 @@ import { getAllUsers } from "@/data-access/user";
 import { UserRole } from "@prisma/client";
 import ManageUserModal from "./ManageUserModal";
 import DeleteUserModal from "./DeleteUserModal";
+import ClickableCell from "../../../../components/ClickableCell";
 
 type Props = {
   role?: UserRole;
@@ -47,9 +48,24 @@ const UsersTable = async ({ role }: Props) => {
           <TableBody>
             {users.map((user, index) => (
               <TableRow key={index}>
-                <TableCell>{user.firstName}</TableCell>
-                <TableCell>{user.lastName}</TableCell>
-                <TableCell>{user.email}</TableCell>
+                <ClickableCell
+                  route={`/user/${user.id}`}
+                  className="cursor-pointer"
+                >
+                  {user.firstName}
+                </ClickableCell>
+                <ClickableCell
+                  route={`/user/${user.id}`}
+                  className="cursor-pointer"
+                >
+                  {user.lastName}
+                </ClickableCell>
+                <ClickableCell
+                  route={`/user/${user.id}`}
+                  className="cursor-pointer"
+                >
+                  {user.email}
+                </ClickableCell>
                 <TableCell className="capitalize">{user.role}</TableCell>
                 {role === UserRole.STUDENT && (
                   <StudentTableRow student={user?.student} />

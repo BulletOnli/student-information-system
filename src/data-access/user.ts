@@ -1,5 +1,19 @@
 import { prisma } from "@/lib/prisma";
-import { Course, Prisma, UserRole } from "@prisma/client";
+import { Prisma, UserRole } from "@prisma/client";
+
+export const getStudentDetails = async (userId: string) => {
+  return await prisma.user.findFirst({
+    where: { id: userId },
+    include: {
+      student: {
+        include: {
+          course: true,
+          reportCard: true,
+        },
+      },
+    },
+  });
+};
 
 type RegisterUser = {
   firstName: string;
@@ -34,20 +48,6 @@ type FacultyInfo = {
 
 export const createFaculty = async (data: FacultyInfo) => {
   return await prisma.faculty.create({ data });
-};
-
-const getUserIncludeObject = (role?: UserRole) => {
-  const includes: Prisma.UserInclude = {};
-
-  if (role === UserRole.STUDENT) {
-    includes.student = {
-      include: {
-        course: true,
-      },
-    };
-  }
-
-  return includes;
 };
 
 export const getAllUsers = async (role?: UserRole) => {
