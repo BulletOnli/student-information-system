@@ -38,7 +38,7 @@ const Homepage = async () => {
   }
 
   return (
-    <div className="w-full p-10">
+    <div className="w-full max-w-7xl mx-auto p-10">
       <p>
         Hi {session.user.role}, {session.user.name}
       </p>

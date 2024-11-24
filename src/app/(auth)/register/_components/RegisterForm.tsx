@@ -93,10 +93,12 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card>
+    <Card className="w-full max-w-xl rounded-2xl p-4">
       <CardHeader>
         <CardTitle>Register</CardTitle>
-        <CardDescription>Create a new account to get started.</CardDescription>
+        <CardDescription>
+          Create a admin account to get started.
+        </CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -207,7 +209,11 @@ const RegisterForm = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="bg-darkGreen hover:bg-darkGreen/90 px-8 text-base w-full"
+              disabled={isPending}
+            >
               {isPending ? "Registering..." : "Register"}
             </Button>
           </CardFooter>

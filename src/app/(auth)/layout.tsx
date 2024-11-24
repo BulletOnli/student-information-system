@@ -12,5 +12,9 @@ export default async function AuthLayout({
     redirect("/");
   }
 
-  return <div className="w-full">{children}</div>;
+  return (
+    <div className="w-full h-screen bg-[url(/images/auth-bg.svg)] bg-cover">
+      {children}
+    </div>
+  );
 }

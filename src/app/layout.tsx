@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <GlobalProviders>
           <Navbar />
-          <div className="pt-16 max-w-7xl mx-auto ">{children}</div>
+          <div className="min-h-[calc(100vh - 65px]">{children}</div>
 
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />

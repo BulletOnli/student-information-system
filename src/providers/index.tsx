@@ -6,7 +6,7 @@ import ReactQueryProvider from "./ReactQueryProvider";
 const GlobalProviders = ({ children }: { children: ReactNode }) => {
   return (
     <ReactQueryProvider>
-      <SessionProvider>{children}</SessionProvider>;
+      <SessionProvider>{children}</SessionProvider>
     </ReactQueryProvider>
   );
 };

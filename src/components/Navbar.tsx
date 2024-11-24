@@ -1,12 +1,19 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { signOut, useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
-const Navbar = async () => {
-  const session = await auth();
+const Navbar = () => {
+  const pathname = usePathname();
+  const { data: session } = useSession();
+
+  if (pathname === "/login" || pathname === "/register") {
+    return null;
+  }
 
   return (
-    <nav className="fixed top-0 w-full bg-background border-b ">
+    <nav className="sticky top-0 w-full bg-background border-b ">
       <div className="max-w-7xl mx-auto px-4 sm:px-0 ">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -16,16 +23,7 @@ const Navbar = async () => {
           </div>
           <div className="hidden md:block">
             {session?.user ? (
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut();
-                }}
-              >
-                <button className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium ">
-                  Logout
-                </button>
-              </form>
+              <button onClick={() => signOut()}>Sign Out</button>
             ) : (
               <>
                 <Link

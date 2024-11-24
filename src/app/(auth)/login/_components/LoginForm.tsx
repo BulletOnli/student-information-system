@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { PasswordInput } from "@/components/PasswordInput";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -51,7 +52,7 @@ const LoginForm = () => {
   }
 
   return (
-    <Card>
+    <Card className="w-full max-w-xl rounded-2xl  p-4">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>
@@ -60,15 +61,19 @@ const LoginForm = () => {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  {/* <FormLabel>Email</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input
+                      placeholder="Email"
+                      {...field}
+                      className="py-6 px-4 text-base bg-gray-200 border-none outline-none rounded-xl"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,12 +84,11 @@ const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
+                    <PasswordInput
                       {...field}
+                      placeholder="Password"
+                      className="py-6 px-4 text-base bg-gray-200 border-none outline-none rounded-xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -99,7 +103,11 @@ const LoginForm = () => {
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="bg-darkGreen hover:bg-darkGreen/90 px-8 text-base rounded-xl mx-auto w-full"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Logging in..." : "Login"}
             </Button>
           </CardFooter>
