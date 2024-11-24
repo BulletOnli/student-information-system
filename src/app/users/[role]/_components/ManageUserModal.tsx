@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,13 +30,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { COURSES, DEPARTMENTS, ROLES } from "@/constants";
+import {
+  DEFAULT_PASSWORD_INPUT,
+  DEPARTMENTS,
+  POSITIONS,
+  ROLES,
+  SECTIONS,
+  SIS_DOMAIN,
+  YEAR_LEVELS,
+} from "@/constants";
 import { useServerAction } from "zsa-react";
 import { createUserAction, updateUserAction } from "../../action";
 import { userSchema } from "@/lib/zod";
 import { toast } from "@/hooks/use-toast";
 import SelectCourse from "@/components/SelectCourse";
 import { UserRole } from "@prisma/client";
+import { PasswordInput } from "@/components/PasswordInput";
 
 type UserDefaults = {
   student?: {
@@ -76,7 +86,7 @@ const getDefaultValues = (
   defaultValues: Props["defaultValues"]
 ) => {
   if (!defaultValues) {
-    return { role: role || UserRole.ADMIN };
+    return { role: role || UserRole.ADMIN, password: DEFAULT_PASSWORD_INPUT };
   }
 
   const roleKey = role?.toLowerCase() as keyof RoleDefaults;
@@ -140,6 +150,15 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
     });
   };
 
+  const generateEmail = (firstName: string, lastName: string) => {
+    if (firstName || lastName) {
+      return `${lastName?.toLowerCase() || ""}${
+        firstName?.toLowerCase() || ""
+      }@${SIS_DOMAIN}`;
+    }
+    return "";
+  };
+
   const isStudent = form.watch("role") === "STUDENT" || role === "STUDENT";
   const isFaculty = form.watch("role") === "FACULTY" || role === "FACULTY";
 
@@ -172,7 +191,17 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const email = generateEmail(
+                            e.target.value,
+                            form.getValues("lastName")
+                          );
+                          form.setValue("email", email);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -185,7 +214,17 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const email = generateEmail(
+                            form.getValues("firstName"),
+                            e.target.value
+                          );
+                          form.setValue("email", email);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -200,8 +239,11 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} />
+                    <Input type="email" {...field} readOnly />
                   </FormControl>
+                  <FormDescription>
+                    This email is automatically generated based on your name.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -214,11 +256,7 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                      readOnly={defaultValues}
-                    />
+                    <PasswordInput {...field} readOnly={defaultValues} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -306,9 +344,20 @@ const StudentFields = ({ form }: FieldProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Year Level</FormLabel>
-              <FormControl>
-                <Input {...field} type="number" />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select year level" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {YEAR_LEVELS?.map((year) => (
+                    <SelectItem key={year} value={year?.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -320,9 +369,21 @@ const StudentFields = ({ form }: FieldProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Section</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select section" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {SECTIONS?.map((section) => (
+                    <SelectItem key={section} value={section}>
+                      {section}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <FormMessage />
             </FormItem>
           )}
@@ -381,7 +442,23 @@ const FacultyFields = ({ form }: FieldProps) => {
             <FormItem>
               <FormLabel>Position</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Position" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {POSITIONS?.map((position) => (
+                      <SelectItem key={position} value={position}>
+                        {position}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
