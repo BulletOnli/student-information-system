@@ -14,6 +14,7 @@ import { AlertTriangle, Trash } from "lucide-react";
 import { useServerAction } from "zsa-react";
 import { deleteUserAction } from "../../action";
 import { toast } from "@/hooks/use-toast";
+import { useSession } from "next-auth/react";
 
 type Props = {
   userId: string;
@@ -23,6 +24,7 @@ type Props = {
 const DeleteUserModal = ({ userId, role }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { isPending, execute } = useServerAction(deleteUserAction);
+  const { data: session } = useSession();
 
   const handleDelete = async () => {
     const [data, err] = await execute({ userId, role });
@@ -43,6 +45,8 @@ const DeleteUserModal = ({ userId, role }: Props) => {
       description: "The user has been successfully deleted.",
     });
   };
+
+  if (session?.user?.id === userId) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

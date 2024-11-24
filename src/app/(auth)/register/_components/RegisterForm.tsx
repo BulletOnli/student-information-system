@@ -19,6 +19,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,8 +31,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpAction } from "../../action";
 import { useServerAction } from "zsa-react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { generateEmail } from "@/lib/utils";
 
 export const registerFormSchema = z
   .object({
@@ -111,7 +112,18 @@ const RegisterForm = () => {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your first name" {...field} />
+                      <Input
+                        placeholder="Enter your first name"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const email = generateEmail(
+                            e.target.value,
+                            form.getValues("lastName")
+                          );
+                          form.setValue("email", email);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +136,18 @@ const RegisterForm = () => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your last name" {...field} />
+                      <Input
+                        placeholder="Enter your last name"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const email = generateEmail(
+                            form.getValues("firstName"),
+                            e.target.value
+                          );
+                          form.setValue("email", email);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -139,8 +162,11 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="Enter your email" {...field} readOnly />
                   </FormControl>
+                  <FormDescription>
+                    This email is automatically generated based on your name.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

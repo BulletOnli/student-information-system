@@ -36,7 +36,6 @@ import {
   POSITIONS,
   ROLES,
   SECTIONS,
-  SIS_DOMAIN,
   YEAR_LEVELS,
 } from "@/constants";
 import { useServerAction } from "zsa-react";
@@ -46,6 +45,7 @@ import { toast } from "@/hooks/use-toast";
 import SelectCourse from "@/components/SelectCourse";
 import { UserRole } from "@prisma/client";
 import { PasswordInput } from "@/components/PasswordInput";
+import { generateEmail } from "@/lib/utils";
 
 type UserDefaults = {
   student?: {
@@ -148,15 +148,6 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
         defaultValues ? "updated" : "created"
       } successfully.`,
     });
-  };
-
-  const generateEmail = (firstName: string, lastName: string) => {
-    if (firstName || lastName) {
-      return `${lastName?.toLowerCase() || ""}${
-        firstName?.toLowerCase() || ""
-      }@${SIS_DOMAIN}`;
-    }
-    return "";
   };
 
   const isStudent = form.watch("role") === "STUDENT" || role === "STUDENT";
