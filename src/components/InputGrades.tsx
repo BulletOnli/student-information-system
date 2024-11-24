@@ -115,38 +115,38 @@ const InputGradesModal = () => {
                 required
               />
             </div>
+          </div>
 
-            <div className="w-full flex">
-              <div className="space-y-2">
-                <Label htmlFor="course">Course</Label>
-                <Input
-                  id="course"
-                  name="course"
-                  value={studentDetails.course}
-                  onChange={handleStudentDetailsChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="yearLevel">Year Level</Label>
-                <Input
-                  id="yearLevel"
-                  name="yearLevel"
-                  value={studentDetails.yearLevel}
-                  onChange={handleStudentDetailsChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="section">Section</Label>
-                <Input
-                  id="section"
-                  name="section"
-                  value={studentDetails.section}
-                  onChange={handleStudentDetailsChange}
-                  required
-                />
-              </div>
+          <div className="w-full flex gap-2">
+            <div className="space-y-2">
+              <Label htmlFor="course">Course</Label>
+              <Input
+                id="course"
+                name="course"
+                value={studentDetails.course}
+                onChange={handleStudentDetailsChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="yearLevel">Year Level</Label>
+              <Input
+                id="yearLevel"
+                name="yearLevel"
+                value={studentDetails.yearLevel}
+                onChange={handleStudentDetailsChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="section">Section</Label>
+              <Input
+                id="section"
+                name="section"
+                value={studentDetails.section}
+                onChange={handleStudentDetailsChange}
+                required
+              />
             </div>
           </div>
           <div className="space-y-2">

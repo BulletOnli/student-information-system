@@ -42,12 +42,10 @@ type UserDefaults = {
     course: { id: string };
     yearLevel: number;
     section: string;
-    studentNumber: number;
   };
   faculty?: {
     department: string;
     position: string;
-    facultyNumber: number;
   };
 };
 
@@ -65,13 +63,11 @@ const formatRoleDefaults: RoleDefaults = {
     courseId: defaults.course.id,
     yearLevel: String(defaults.yearLevel),
     section: defaults.section,
-    studentNumber: String(defaults.studentNumber),
   }),
 
   faculty: (defaults) => ({
     department: defaults.department,
     position: defaults.position,
-    facultyNumber: String(defaults.facultyNumber),
   }),
 };
 
@@ -278,7 +274,7 @@ type FieldProps = {
 const StudentFields = ({ form }: FieldProps) => {
   return (
     <>
-      <FormField
+      {/* <FormField
         control={form.control}
         name="studentNumber"
         render={({ field }) => (
@@ -290,7 +286,7 @@ const StudentFields = ({ form }: FieldProps) => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <div className="w-full grid grid-cols-3 gap-2">
         <FormField
@@ -339,7 +335,7 @@ const StudentFields = ({ form }: FieldProps) => {
 const FacultyFields = ({ form }: FieldProps) => {
   return (
     <>
-      <FormField
+      {/* <FormField
         control={form.control}
         name="facultyNumber"
         render={({ field }) => (
@@ -351,7 +347,7 @@ const FacultyFields = ({ form }: FieldProps) => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <div className="w-full grid grid-cols-2 gap-2">
         <FormField

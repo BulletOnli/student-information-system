@@ -32,7 +32,6 @@ type StudentInfo = {
   courseId: string;
   section: string;
   yearLevel: number;
-  studentNumber: number;
 };
 
 export const createStudent = async (data: StudentInfo) => {
@@ -43,7 +42,6 @@ type FacultyInfo = {
   userId: string;
   department: string;
   position: string;
-  facultyNumber: number;
 };
 
 export const createFaculty = async (data: FacultyInfo) => {

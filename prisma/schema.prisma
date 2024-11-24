@@ -40,8 +40,8 @@ model Student {
   id            String       @id @default(cuid())
   user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String       @unique
-  studentNumber BigInt
-  course        Course?      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentNumber BigInt       @unique @default(autoincrement())
+  course        Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId      String
   yearLevel     Int
   section       String
@@ -54,7 +54,7 @@ model Faculty {
   id            String @id @default(cuid())
   user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String @unique
-  facultyNumber BigInt
+  facultyNumber BigInt @unique @default(autoincrement())
   department    String
   position      String
 

@@ -44,7 +44,6 @@ export const createUserAction = createServerAction()
         userId: user.id,
         department: input.department,
         position: input.position,
-        facultyNumber: Number(input.facultyNumber),
       });
     }
 
@@ -54,7 +53,6 @@ export const createUserAction = createServerAction()
         courseId: input.courseId,
         section: input.section,
         yearLevel: Number(input.yearLevel),
-        studentNumber: Number(input.studentNumber),
       });
     }
 
@@ -112,7 +110,6 @@ export const updateUserAction = createServerAction()
         id: user.faculty?.id as string,
         department: input.department,
         position: input.position,
-        facultyNumber: Number(input.facultyNumber),
       });
     }
 
@@ -122,7 +119,6 @@ export const updateUserAction = createServerAction()
         courseId: input.courseId,
         section: input.section,
         yearLevel: Number(input.yearLevel),
-        studentNumber: Number(input.studentNumber),
       });
     }
 
