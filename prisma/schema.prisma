@@ -39,26 +39,24 @@ model User {
 }
 
 model Student {
-  id            String       @id @default(cuid())
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String       @unique
-  studentNumber BigInt       @unique @default(autoincrement())
-  course        Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId      String
-  yearLevel     Int
-  section       String
-  reportCard    ReportCard[]
+  id         String       @id @default(cuid())
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String       @unique
+  course     Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId   String
+  yearLevel  Int
+  section    String
+  reportCard ReportCard[]
 
   @@map("students")
 }
 
 model Faculty {
-  id            String @id @default(cuid())
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String @unique
-  facultyNumber BigInt @unique @default(autoincrement())
-  department    String
-  position      String
+  id         String @id @default(cuid())
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String @unique
+  department String
+  position   String
 
   @@map("faculties")
 }

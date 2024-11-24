@@ -17,7 +17,9 @@ import { getAllUsers } from "@/data-access/user";
 import { UserRole } from "@prisma/client";
 import ManageUserModal from "./ManageUserModal";
 import DeleteUserModal from "./DeleteUserModal";
-import ClickableCell from "../../../../components/ClickableCell";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   role?: UserRole;
@@ -36,36 +38,23 @@ const UsersTable = async ({ role }: Props) => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>First Name</TableHead>
               <TableHead>Last Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
               {role === UserRole.STUDENT && <StudentTableHeader />}
               {role === UserRole.FACULTY && <FacultyTableHeader />}
-              <TableHead>Action</TableHead>
+              <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user, index) => (
+            {users?.map((user, index) => (
               <TableRow key={index}>
-                <ClickableCell
-                  route={`/user/${user.id}`}
-                  className="cursor-pointer"
-                >
-                  {user.firstName}
-                </ClickableCell>
-                <ClickableCell
-                  route={`/user/${user.id}`}
-                  className="cursor-pointer"
-                >
-                  {user.lastName}
-                </ClickableCell>
-                <ClickableCell
-                  route={`/user/${user.id}`}
-                  className="cursor-pointer"
-                >
-                  {user.email}
-                </ClickableCell>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>{user.email}</TableCell>
                 <TableCell className="capitalize">{user.role}</TableCell>
                 {role === UserRole.STUDENT && (
                   <StudentTableRow student={user?.student} />
@@ -73,7 +62,12 @@ const UsersTable = async ({ role }: Props) => {
                 {role === UserRole.FACULTY && (
                   <FacultyTableRow faculty={user?.faculty} />
                 )}
-                <TableCell className="space-x-2">
+                <TableCell className="flex items-center gap-1 justify-center">
+                  <Link href={`/user/${user.id}`}>
+                    <Button size="icon" variant="outline">
+                      <Eye />
+                    </Button>
+                  </Link>
                   <ManageUserModal role={user.role} defaultValues={user} />
                   <DeleteUserModal userId={user.id} role={user.role} />
                 </TableCell>
@@ -92,7 +86,6 @@ const UsersTable = async ({ role }: Props) => {
 export const StudentTableHeader = () => {
   return (
     <>
-      <TableHead>Student #</TableHead>
       <TableHead>Course</TableHead>
       <TableHead>Year Level</TableHead>
       <TableHead>Section</TableHead>
@@ -103,7 +96,6 @@ export const StudentTableHeader = () => {
 export const StudentTableRow = ({ student }: { student: any }) => {
   return (
     <>
-      <TableCell>{student.studentNumber.toString()}</TableCell>
       <TableCell>{student.course.code}</TableCell>
       <TableCell>{student.yearLevel}</TableCell>
       <TableCell>{student.section}</TableCell>
@@ -114,7 +106,6 @@ export const StudentTableRow = ({ student }: { student: any }) => {
 export const FacultyTableHeader = () => {
   return (
     <>
-      <TableHead>Faculty #</TableHead>
       <TableHead>Department</TableHead>
       <TableHead>Position</TableHead>
     </>
@@ -124,7 +115,6 @@ export const FacultyTableHeader = () => {
 export const FacultyTableRow = ({ faculty }: { faculty: any }) => {
   return (
     <>
-      <TableCell>{faculty.facultyNumber.toString()}</TableCell>
       <TableCell>{faculty.department}</TableCell>
       <TableCell>{faculty.position}</TableCell>
     </>

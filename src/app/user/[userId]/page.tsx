@@ -38,13 +38,6 @@ const UserDetailsPage = async ({ params }: Props) => {
       </p>
       <h2 className="mt-4">Student Details</h2>
       <p>
-        <strong>Student ID:</strong> {user?.student?.id}
-      </p>
-      <p>
-        <strong>Student Number:</strong>{" "}
-        {user?.student?.studentNumber.toString()}
-      </p>
-      <p>
         <strong>Course ID:</strong> {user?.student?.courseId}
       </p>
       <p>

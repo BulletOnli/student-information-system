@@ -312,20 +312,6 @@ type FieldProps = {
 const StudentFields = ({ form }: FieldProps) => {
   return (
     <>
-      {/* <FormField
-        control={form.control}
-        name="studentNumber"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Student Number</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      /> */}
-
       <div className="w-full grid grid-cols-3 gap-2">
         <FormField
           control={form.control}
@@ -396,20 +382,6 @@ const StudentFields = ({ form }: FieldProps) => {
 const FacultyFields = ({ form }: FieldProps) => {
   return (
     <>
-      {/* <FormField
-        control={form.control}
-        name="facultyNumber"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Faculty Number</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      /> */}
-
       <div className="w-full grid grid-cols-2 gap-2">
         <FormField
           control={form.control}

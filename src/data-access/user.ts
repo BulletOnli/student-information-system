@@ -24,7 +24,13 @@ type RegisterUser = {
 };
 
 export const createUser = async (data: RegisterUser) => {
-  return await prisma.user.create({ data });
+  const randomId = `${Date.now()}-${Math.floor(Math.random() * 1_000)}`;
+  return await prisma.user.create({
+    data: {
+      ...data,
+      id: randomId,
+    },
+  });
 };
 
 type StudentInfo = {

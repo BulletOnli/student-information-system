@@ -25,13 +25,9 @@ import {
 import { AlertCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { PasswordInput } from "@/components/PasswordInput";
+import { signInSchema } from "@/lib/zod";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(1, { message: "Password is required" }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof signInSchema>;
 
 const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +35,7 @@ const LoginForm = () => {
   const isError = searchParams.get("error") === "CredentialsSignin";
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -70,7 +66,7 @@ const LoginForm = () => {
                   {/* <FormLabel>Email</FormLabel> */}
                   <FormControl>
                     <Input
-                      placeholder="Email"
+                      placeholder="ID or Email"
                       {...field}
                       className="py-6 px-4 text-base bg-gray-200 border-none outline-none rounded-xl"
                     />

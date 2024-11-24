@@ -6,8 +6,7 @@ import z from "zod";
 export const signInSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
-    .min(1, "Email is required")
-    .email("Invalid email"),
+    .min(1, "Email or ID is required"),
   password: z
     .string({ required_error: "Password is required" })
     .min(1, "Password is required")
@@ -37,10 +36,6 @@ export const baseUserSchema = z.object({
 // Faculty schema
 export const facultySchema = baseUserSchema.extend({
   role: z.literal("FACULTY"),
-  facultyNumber: z
-    .string()
-    .min(1, { message: "Faculty number is required." })
-    .optional(),
   department: z.string().min(1, { message: "Department is required." }),
   position: z.string().min(1, { message: "Position is required." }),
 });
@@ -48,10 +43,6 @@ export const facultySchema = baseUserSchema.extend({
 // Student schema
 export const studentSchema = baseUserSchema.extend({
   role: z.literal("STUDENT"),
-  studentNumber: z
-    .string()
-    .min(1, { message: "Student number is required." })
-    .optional(),
   courseId: z.string().min(1, { message: "Course is required." }),
   section: z.string().min(1, { message: "Section is required." }),
   yearLevel: z.string().min(1, { message: "Year level is required." }),
