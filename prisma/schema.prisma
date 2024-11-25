@@ -21,14 +21,15 @@ enum UserRole {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  firstName String
-  lastName  String
-  role      UserRole @default(ADMIN)
-  student   Student?
-  faculty   Faculty?
+  id           String         @id @default(cuid())
+  email        String         @unique
+  password     String
+  firstName    String
+  lastName     String
+  role         UserRole       @default(ADMIN)
+  student      Student?
+  faculty      Faculty?
+  announcement Announcement[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,4 +89,16 @@ model Grade {
   grade        Float
 
   @@map("grades")
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("announcements")
 }

@@ -1,23 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAllAnnouncements } from "@/data-access/announcement";
+import { formatDate } from "@/utils/formatDate";
 import { Bell } from "lucide-react";
 
-const announcements = [
-  {
-    id: "1",
-    title: "Campus Closure Notice",
-    content: "Campus will be closed on Monday due to scheduled maintenance.",
-    date: "2024-01-20",
-  },
-  {
-    id: "2",
-    title: "New Library Resources",
-    content:
-      "Access to new digital resources is now available for all students.",
-    date: "2024-01-19",
-  },
-];
+export async function Announcements() {
+  const announcements = await getAllAnnouncements();
 
-export function Announcements() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center space-x-2">
@@ -26,6 +14,10 @@ export function Announcements() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
+          {announcements.length === 0 && (
+            <p className="text-sm text-center">No announcements yet.</p>
+          )}
+
           {announcements.map((announcement) => (
             <div key={announcement.id} className="space-y-2">
               <h3 className="font-medium">{announcement.title}</h3>
@@ -33,7 +25,7 @@ export function Announcements() {
                 {announcement.content}
               </p>
               <p className="text-xs text-muted-foreground">
-                Posted on: {announcement.date}
+                Posted on: {formatDate(announcement.createdAt)}
               </p>
             </div>
           ))}

@@ -38,6 +38,10 @@ const Homepage = async () => {
           <div>
             <h2 className="mb-4 text-xl font-semibold">Courses</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3">
+              {courses.length === 0 && (
+                <p className="text-sm">No courses yet.</p>
+              )}
+
               {courses.map((course) => (
                 <CourseCard key={course.title} {...course} />
               ))}

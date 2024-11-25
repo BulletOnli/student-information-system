@@ -3,6 +3,7 @@ import {
   BookOpen,
   LayoutDashboard,
   LogOut,
+  Megaphone,
   Settings,
   User as UserIcon,
 } from "lucide-react";
@@ -42,12 +43,12 @@ const navigation = [
     href: "/courses",
     prohibitedRoles: [] as UserRole[],
   },
-  // {
-  //   title: "Users",
-  //   icon: UserIcon,
-  //   href: "/users",
-  //   prohibitedRoles: [UserRole.FACULTY, UserRole.STUDENT] as string[],
-  // },
+  {
+    title: "Announcements",
+    icon: Megaphone,
+    href: "/announcement",
+    prohibitedRoles: [] as string[],
+  },
 ];
 
 type Props = {
