@@ -25,7 +25,7 @@ const CourseInfoPage = async ({ params }: Props) => {
   }
 
   return (
-    <div>
+    <div className="p-6">
       <h1>Course Info</h1>
       <p>ID: {params.courseId}</p>
       <p>Title: {course.title}</p>

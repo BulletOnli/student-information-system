@@ -43,7 +43,7 @@ const ManageUsers = async ({ params }: Props) => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-10">
+    <div className="p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Manage {params.role}</h1>
         <div className="space-x-2">

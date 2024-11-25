@@ -15,7 +15,7 @@ const CoursesPage = async () => {
   const courses = await getAllCourses();
 
   return (
-    <div className="p-10">
+    <div className="p-6">
       <div className="flex items-center gap-8">
         <h1>Courses</h1>
         {session.user.role === UserRole.ADMIN && <ManageCourseModal />}

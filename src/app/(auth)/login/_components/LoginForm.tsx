@@ -50,10 +50,12 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-xl rounded-2xl  p-4">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-center text-xl font-bold">
+          GJC Student Portal
+        </CardTitle>
+        {/* <CardDescription>
           Enter your credentials to access your account.
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -63,7 +65,6 @@ const LoginForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  {/* <FormLabel>Email</FormLabel> */}
                   <FormControl>
                     <Input
                       placeholder="ID or Email"

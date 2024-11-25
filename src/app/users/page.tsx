@@ -11,7 +11,7 @@ const UsersPage = async () => {
   }
 
   return (
-    <div className="space-x-4">
+    <div className="space-x-4 p-6">
       <Link href="/users/student" className="text-blue-600 underline">
         Student
       </Link>
