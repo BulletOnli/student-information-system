@@ -34,13 +34,13 @@ const navigation = [
     title: "Dashboard",
     icon: LayoutDashboard,
     href: "/",
-    prohibitedRoles: [],
+    prohibitedRoles: [] as UserRole[],
   },
   {
     title: "Courses",
     icon: BookOpen,
     href: "/courses",
-    prohibitedRoles: [],
+    prohibitedRoles: [] as UserRole[],
   },
   // {
   //   title: "Users",
@@ -75,19 +75,21 @@ const DashboardSidebar = ({ user }: Props) => {
               {user?.lastName?.[0]}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-1">
+          <div className="space-y-1 text-center">
             <h2 className="text-lg font-semibold">
               {user?.firstName} {user?.lastName}
             </h2>
             <p className="text-sm text-muted-foreground">{user?.email}</p>
-            <p className="text-sm text-muted-foreground">{user?.role}</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              {user?.role}
+            </p>
           </div>
         </div>
       </SidebarHeader>
       <SidebarContent className="p-4">
         <SidebarMenu>
           {navigation.map((item) => {
-            if (item.prohibitedRoles.includes(user?.role!)) {
+            if (item.prohibitedRoles.includes(user?.role as UserRole)) {
               return null;
             }
 
@@ -108,50 +110,52 @@ const DashboardSidebar = ({ user }: Props) => {
             );
           })}
 
-          <SidebarMenuItem>
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1" className="border-none">
-                <AccordionTrigger className=" flex w-full items-center justify-start gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-secondary hover:no-underline">
-                  <UserIcon className="h-4 w-4" />
-                  Users
-                </AccordionTrigger>
+          {user.role === UserRole.ADMIN && (
+            <SidebarMenuItem>
+              <Accordion type="single" collapsible>
+                <AccordionItem value="item-1" className="border-none">
+                  <AccordionTrigger className=" flex w-full items-center justify-start gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-secondary hover:no-underline">
+                    <UserIcon className="h-4 w-4" />
+                    Users
+                  </AccordionTrigger>
 
-                <Link href="/users/student">
-                  <AccordionContent className="pl-4 pb-0">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 text-sm"
-                    >
-                      <UserIcon className="h-4 w-4" />
-                      Student
-                    </Button>
-                  </AccordionContent>
-                </Link>
-                <Link href="/users/faculty">
-                  <AccordionContent className="pl-4 pb-0">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 text-sm"
-                    >
-                      <UserIcon className="h-4 w-4" />
-                      Faculty
-                    </Button>
-                  </AccordionContent>
-                </Link>
-                <Link href="/users/admin">
-                  <AccordionContent className="pl-4 pb-0">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 text-sm"
-                    >
-                      <UserIcon className="h-4 w-4" />
-                      Admin
-                    </Button>
-                  </AccordionContent>
-                </Link>
-              </AccordionItem>
-            </Accordion>
-          </SidebarMenuItem>
+                  <Link href="/users/student">
+                    <AccordionContent className="pl-4 pb-0">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 text-sm"
+                      >
+                        <UserIcon className="h-4 w-4" />
+                        Student
+                      </Button>
+                    </AccordionContent>
+                  </Link>
+                  <Link href="/users/faculty">
+                    <AccordionContent className="pl-4 pb-0">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 text-sm"
+                      >
+                        <UserIcon className="h-4 w-4" />
+                        Faculty
+                      </Button>
+                    </AccordionContent>
+                  </Link>
+                  <Link href="/users/admin">
+                    <AccordionContent className="pl-4 pb-0">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-3 text-sm"
+                      >
+                        <UserIcon className="h-4 w-4" />
+                        Admin
+                      </Button>
+                    </AccordionContent>
+                  </Link>
+                </AccordionItem>
+              </Accordion>
+            </SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">

@@ -1,17 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Calendar, FileText, Library } from "lucide-react";
+import Link from "next/link";
 
 const links = [
   {
     title: "Library Access",
     icon: Library,
-    href: "#",
+    href: "https://www.facebook.com/gjccollegelibrary/",
   },
   {
     title: "Assignments",
     icon: FileText,
-    href: "#",
+    href: "https://classroom.google.com/u/4/h",
   },
   {
     title: "Schedule",
@@ -40,10 +41,10 @@ export function QuickLinks() {
               className="w-full justify-start"
               asChild
             >
-              <a href={link.href}>
+              <Link target="_blank" href={link.href}>
                 <link.icon className="mr-2 h-4 w-4" />
                 {link.title}
-              </a>
+              </Link>
             </Button>
           ))}
         </div>

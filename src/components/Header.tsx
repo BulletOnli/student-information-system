@@ -21,7 +21,7 @@ const Header = () => {
             <SearchBar />
           </div>
 
-          {/* {session?.user && <UserNav />} */}
+          <UserNav />
         </div>
       </div>
     </header>
