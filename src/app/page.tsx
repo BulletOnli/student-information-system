@@ -8,6 +8,7 @@ import { CourseCard } from "@/components/Dashboard/CourseCard";
 import { TodoList } from "@/components/TodoList";
 import { QuickLinks } from "@/components/Dashboard/QuickLinks";
 import Link from "next/link";
+import StudentDetails from "@/components/StudentDetails";
 
 const Homepage = async () => {
   const session = await auth();
@@ -16,7 +17,7 @@ const Homepage = async () => {
   }
 
   const courses = await getAllCourses();
-  const { email, firstName, lastName, role } = session.user;
+  const { email, firstName, lastName, role, id } = session.user;
 
   return (
     <div className="mx-auto bg-background">
@@ -29,32 +30,36 @@ const Homepage = async () => {
               Welcome back, {role}!
             </h1>
             <p className="text-muted-foreground">
-              Here&apos;s what&apos;s happening with your courses today.
+              Here&apos;s what&apos;s happening with your account today.
             </p>
           </div>
 
           <Announcements />
 
           {/* Course Cards Grid */}
-          <div>
-            <div className="flex items-center gap-4 justify-between">
-              <h2 className="mb-4 text-xl font-semibold">Courses</h2>
-              {courses?.length > 0 && (
-                <Link href="/courses" className="text-sm">
-                  View all
-                </Link>
-              )}
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3">
-              {courses.length === 0 && (
-                <p className="text-sm">No courses yet.</p>
-              )}
+          {role !== UserRole.STUDENT && (
+            <div>
+              <div className="flex items-center gap-4 justify-between">
+                <h2 className="mb-4 text-xl font-semibold">Courses</h2>
+                {courses?.length > 0 && (
+                  <Link href="/courses" className="text-sm">
+                    View all
+                  </Link>
+                )}
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3">
+                {courses.length === 0 && (
+                  <p className="text-sm">No courses yet.</p>
+                )}
 
-              {courses?.slice(0, 3).map((course) => (
-                <CourseCard key={course.title} {...course} />
-              ))}
+                {courses?.slice(0, 3).map((course) => (
+                  <CourseCard key={course.title} {...course} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {role === UserRole.STUDENT && <StudentDetails userId={id ?? ""} />}
         </main>
 
         {/* Right Sidebar */}

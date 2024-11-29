@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllAnnouncements } from "@/data-access/announcement";
 import { formatDate } from "@/utils/formatDate";
-import { Bell } from "lucide-react";
+import { ArrowRight, Bell } from "lucide-react";
+import Link from "next/link";
 
 export async function Announcements() {
   const announcements = await getAllAnnouncements();
@@ -18,7 +19,7 @@ export async function Announcements() {
             <p className="text-sm text-center">No announcements yet.</p>
           )}
 
-          {announcements.map((announcement) => (
+          {announcements?.slice(0, 2).map((announcement) => (
             <div key={announcement.id} className="space-y-2">
               <h3 className="font-medium">{announcement.title}</h3>
               <p className="text-sm text-muted-foreground">
@@ -29,6 +30,15 @@ export async function Announcements() {
               </p>
             </div>
           ))}
+
+          {announcements.length > 2 && (
+            <Link
+              href="/announcement"
+              className="flex items-center gap-1 text-sm mt-2"
+            >
+              View all <ArrowRight className="size-5" />
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
