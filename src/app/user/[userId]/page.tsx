@@ -1,5 +1,5 @@
 import NotFound from "@/app/not-found";
-import StudentDetails from "@/components/StudentDetails";
+import StudentDetails from "@/components/UserDetails";
 import { getStudentDetails } from "@/data-access/user";
 import { redirect } from "next/navigation";
 import React from "react";

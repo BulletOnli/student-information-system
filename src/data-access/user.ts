@@ -1,6 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma, UserRole } from "@prisma/client";
 
+export const getUserDetails = async (userId: string) => {
+  return await prisma.user.findFirst({
+    where: { id: userId },
+    include: {
+      student: {
+        include: {
+          course: true,
+          reportCard: true,
+        },
+      },
+      faculty: true,
+    },
+  });
+};
+
 export const getStudentDetails = async (userId: string) => {
   return await prisma.user.findFirst({
     where: { id: userId },

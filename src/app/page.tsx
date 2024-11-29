@@ -8,7 +8,7 @@ import { CourseCard } from "@/components/Dashboard/CourseCard";
 import { TodoList } from "@/components/TodoList";
 import { QuickLinks } from "@/components/Dashboard/QuickLinks";
 import Link from "next/link";
-import StudentDetails from "@/components/StudentDetails";
+import UserDetails from "@/components/UserDetails";
 
 const Homepage = async () => {
   const session = await auth();
@@ -59,7 +59,7 @@ const Homepage = async () => {
             </div>
           )}
 
-          {role === UserRole.STUDENT && <StudentDetails userId={id ?? ""} />}
+          {role === UserRole.STUDENT && <UserDetails userId={id ?? ""} />}
         </main>
 
         {/* Right Sidebar */}
