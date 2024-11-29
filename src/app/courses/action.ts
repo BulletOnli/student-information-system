@@ -1,5 +1,5 @@
 "use server";
-import { createCourse, updateCourse } from "@/data-access/course";
+import { createCourse, deleteCourse, updateCourse } from "@/data-access/course";
 import { courseSchema } from "@/lib/zod";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -21,4 +21,16 @@ export const updateCourseAction = createServerAction()
 
     revalidatePath(`/courses/${course.id}`);
     return course;
+  });
+
+export const deleteCourseAction = createServerAction()
+  .input(
+    z.object({
+      id: z.string(),
+    })
+  )
+  .handler(async ({ input }) => {
+    await deleteCourse(input.id);
+
+    revalidatePath("/courses");
   });

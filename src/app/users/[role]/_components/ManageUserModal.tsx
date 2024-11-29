@@ -108,9 +108,10 @@ const getDefaultValues = (
 type Props = {
   role?: "STUDENT" | "FACULTY" | "ADMIN";
   defaultValues?: any;
+  courseId?: string;
 };
 
-const ManageUserModal = ({ role, defaultValues }: Props) => {
+const ManageUserModal = ({ role, courseId, defaultValues }: Props) => {
   const [open, setOpen] = useState(false);
   const { execute, isPending } = useServerAction(
     defaultValues ? updateUserAction : createUserAction
@@ -118,7 +119,10 @@ const ManageUserModal = ({ role, defaultValues }: Props) => {
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
-    defaultValues: getDefaultValues(role, defaultValues),
+    defaultValues: {
+      ...getDefaultValues(role, defaultValues),
+      ...(courseId && { courseId }),
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {

@@ -2,8 +2,13 @@ import { Suspense } from "react";
 import { getAllAnnouncements } from "@/data-access/announcement";
 import { CreateAnnouncementModal } from "./_components/CreateAnnouncementModal";
 import { formatDate } from "@/utils/formatDate";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 async function AnnouncementsList() {
+  const session = await auth();
+  if (!session?.user) redirect("/login");
+
   const announcements = await getAllAnnouncements();
 
   return (

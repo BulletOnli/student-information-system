@@ -7,6 +7,7 @@ import { Announcements } from "@/components/Dashboard/Announcements";
 import { CourseCard } from "@/components/Dashboard/CourseCard";
 import { TodoList } from "@/components/TodoList";
 import { QuickLinks } from "@/components/Dashboard/QuickLinks";
+import Link from "next/link";
 
 const Homepage = async () => {
   const session = await auth();
@@ -36,13 +37,20 @@ const Homepage = async () => {
 
           {/* Course Cards Grid */}
           <div>
-            <h2 className="mb-4 text-xl font-semibold">Courses</h2>
+            <div className="flex items-center gap-4 justify-between">
+              <h2 className="mb-4 text-xl font-semibold">Courses</h2>
+              {courses?.length > 0 && (
+                <Link href="/courses" className="text-sm">
+                  View all
+                </Link>
+              )}
+            </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3">
               {courses.length === 0 && (
                 <p className="text-sm">No courses yet.</p>
               )}
 
-              {courses.map((course) => (
+              {courses?.slice(0, 3).map((course) => (
                 <CourseCard key={course.title} {...course} />
               ))}
             </div>

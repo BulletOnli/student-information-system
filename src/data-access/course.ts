@@ -38,3 +38,7 @@ export const updateCourse = async (
     data,
   });
 };
+
+export const deleteCourse = async (id: string) => {
+  return await prisma.course.delete({ where: { id } });
+};
