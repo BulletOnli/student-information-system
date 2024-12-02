@@ -63,7 +63,10 @@ const ManageCourseModal = ({ defaultValues }: Props) => {
     const [data, err] = await execute(updatedValues);
 
     if (err) {
-      console.error(err);
+      console.error(err.data);
+      if (err.message.includes("code")) {
+        form.setError("code", { message: "This course already exist." });
+      }
 
       toast({
         title: "An error occurred",
