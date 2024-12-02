@@ -43,7 +43,7 @@ export const createUser = async (data: RegisterUser) => {
   return await prisma.user.create({
     data: {
       ...data,
-      schoolId: randomId,
+      id: randomId,
     },
   });
 };

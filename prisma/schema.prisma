@@ -18,12 +18,10 @@ enum UserRole {
   STUDENT
   FACULTY
   ADMIN
-  SUPER_ADMIN
 }
 
 model User {
   id           String         @id @default(cuid())
-  schoolId     String
   email        String         @unique
   password     String
   firstName    String
@@ -75,15 +73,10 @@ model Course {
 }
 
 model ReportCard {
-  id           String  @id @default(cuid())
-  student      Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId    String
-  grades       Grade[]
-  academicYear String
-  semester     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String  @id @default(cuid())
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  grades    Grade[]
 
   @@map("report_cards")
 }
