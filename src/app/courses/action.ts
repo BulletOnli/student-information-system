@@ -8,10 +8,7 @@ import { createServerAction } from "zsa";
 export const addCourseAction = createServerAction()
   .input(courseSchema)
   .handler(async ({ input }) => {
-    const course = await createCourse({
-      ...input,
-      code: input.code.toUpperCase(),
-    });
+    const course = await createCourse(input);
 
     revalidatePath("/courses");
     return course;
@@ -20,11 +17,7 @@ export const addCourseAction = createServerAction()
 export const updateCourseAction = createServerAction()
   .input(courseSchema.and(z.object({ id: z.string() })))
   .handler(async ({ input }) => {
-    const course = await updateCourse({
-      ...input,
-      id: input.id,
-      code: input.code.toUpperCase(),
-    });
+    const course = await updateCourse({ ...input, id: input.id });
 
     revalidatePath(`/courses/${course.id}`);
     return course;

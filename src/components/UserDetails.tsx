@@ -34,9 +34,9 @@ const UserDetails = async ({ userId }: Props) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-sm font-medium text-muted-foreground">
-                School ID
+                ID
               </label>
-              <p className="font-medium">{user?.schoolId}</p>
+              <p className="font-medium">{user?.id}</p>
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium text-muted-foreground">
