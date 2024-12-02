@@ -18,7 +18,6 @@ enum UserRole {
   STUDENT
   FACULTY
   ADMIN
-  SUPER_ADMIN
 }
 
 model User {
