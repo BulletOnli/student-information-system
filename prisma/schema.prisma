@@ -22,6 +22,7 @@ enum UserRole {
 
 model User {
   id           String         @id @default(cuid())
+  schoolId     String         @unique
   email        String         @unique
   password     String
   firstName    String
@@ -73,10 +74,15 @@ model Course {
 }
 
 model ReportCard {
-  id        String  @id @default(cuid())
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId String
-  grades    Grade[]
+  id           String  @id @default(cuid())
+  student      Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId    String
+  grades       Grade[]
+  academicYear String
+  semester     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("report_cards")
 }
