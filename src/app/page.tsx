@@ -20,7 +20,7 @@ const Homepage = async () => {
   const { email, firstName, lastName, role, id } = session.user;
 
   return (
-    <div className="mx-auto bg-background ">
+    <div className="mx-auto bg-background">
       <div className="flex min-h-[calc(100vh-65px)]">
         {/* Main Content */}
         <main className="flex-1 p-8 space-y-8">
