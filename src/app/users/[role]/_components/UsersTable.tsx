@@ -38,7 +38,7 @@ const UsersTable = async ({ role }: Props) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
+              <TableHead>School ID</TableHead>
               <TableHead>First Name</TableHead>
               <TableHead>Last Name</TableHead>
               <TableHead>Email</TableHead>
@@ -51,7 +51,7 @@ const UsersTable = async ({ role }: Props) => {
           <TableBody>
             {users?.map((user, index) => (
               <TableRow key={index}>
-                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.schoolId}</TableCell>
                 <TableCell>{user.firstName}</TableCell>
                 <TableCell>{user.lastName}</TableCell>
                 <TableCell>{user.email}</TableCell>
