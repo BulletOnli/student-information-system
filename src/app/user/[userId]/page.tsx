@@ -17,8 +17,6 @@ const UserDetailsPage = async ({ params }: Props) => {
     return <NotFound />;
   }
 
-  if (user.id !== params.userId) redirect("");
-
   return (
     <div className="mx-auto p-6 space-y-6">
       <StudentDetails userId={params.userId} />

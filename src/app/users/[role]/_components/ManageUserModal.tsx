@@ -122,6 +122,7 @@ const ManageUserModal = ({ role, courseId, defaultValues }: Props) => {
     defaultValues: {
       ...getDefaultValues(role, defaultValues),
       ...(courseId && { courseId }),
+      ...(defaultValues?.password && { password: defaultValues.password }), // Don't show password if it's already set
     },
   });
 
@@ -244,19 +245,21 @@ const ManageUserModal = ({ role, courseId, defaultValues }: Props) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} readOnly={defaultValues} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {!defaultValues?.password && (
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput {...field} readOnly={defaultValues} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}

@@ -1,10 +1,10 @@
 import NotFound from "@/app/not-found";
+import ManageUserModal from "@/app/users/[role]/_components/ManageUserModal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserDetails } from "@/data-access/user";
-import { Faculty, Student, UserRole, User as UserType } from "@prisma/client";
+import { Faculty, UserRole, User as UserType } from "@prisma/client";
 import { GraduationCap, IdCard, Mail, User } from "lucide-react";
-import { redirect } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -18,10 +18,10 @@ const UserDetails = async ({ userId }: Props) => {
     return <NotFound />;
   }
 
-  if (user.id !== userId) redirect("");
-
   return (
     <div className="mx-auto space-y-6">
+      <ManageUserModal defaultValues={user} role={user.role} />
+
       {/* User Details Card */}
       <Card>
         <CardHeader>
@@ -65,11 +65,6 @@ const UserDetails = async ({ userId }: Props) => {
         </CardContent>
       </Card>
 
-      {/* Student Details Card */}
-      {user.role === UserRole.STUDENT && (
-        <StudentDetails student={user.student} user={user} />
-      )}
-
       {/* Faculty Details Card */}
       {user.role === UserRole.FACULTY && (
         <FacultyDetails faculty={user.faculty} user={user} />
@@ -86,32 +81,44 @@ const UserDetails = async ({ userId }: Props) => {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-4">
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">
-                  Course ID
-                </label>
-                <p className="font-medium">cm3x3nrna0000cdwff2a1mrx7</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Course ID
+                  </label>
+                  <p className="font-medium">{user?.student?.course?.id}</p>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Year Level
+                  </label>
+                  <p className="font-medium">{user?.student?.yearLevel}</p>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Section
+                  </label>
+                  <p className="font-medium">{user?.student?.section}</p>
+                </div>
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-muted-foreground">
                   Course Code
                 </label>
-                <p className="font-medium">BSIT</p>
+                <p className="font-medium">{user.student?.course?.code}</p>
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-muted-foreground">
                   Course Title
                 </label>
-                <p className="font-medium">
-                  Bachelor of Science in Information Technology
-                </p>
+                <p className="font-medium">{user.student?.course?.title}</p>
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-muted-foreground">
                   Course Description
                 </label>
                 <p className="font-medium">
-                  Pindot pindot lang daw they said true
+                  {user.student?.course?.description}
                 </p>
               </div>
             </div>
@@ -119,48 +126,6 @@ const UserDetails = async ({ userId }: Props) => {
         </Card>
       )}
     </div>
-  );
-};
-
-type StudentDetailProps = {
-  student: Student | null;
-  user: UserType;
-};
-
-const StudentDetails = ({ user, student }: StudentDetailProps) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <IdCard className="h-5 w-5" />
-          {user?.role.charAt(0).toUpperCase() +
-            user?.role.slice(1).toLowerCase()}{" "}
-          Details
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">
-              Course ID
-            </label>
-            <p className="font-medium">{student?.id}</p>
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">
-              Year Level
-            </label>
-            <p className="font-medium">{student?.yearLevel}</p>
-          </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">
-              Section
-            </label>
-            <p className="font-medium">{student?.section}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
   );
 };
 
