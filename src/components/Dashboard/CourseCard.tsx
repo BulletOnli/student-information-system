@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import DeleteCourseButton from "@/app/courses/_components/DeleteCourseButton";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -12,7 +14,15 @@ interface CourseCardProps {
 export function CourseCard({ title, description, code, id }: CourseCardProps) {
   return (
     <Card className="relative hover:bg-muted/50 transition-colors">
-      <DeleteCourseButton courseId={id} />
+      <DeleteCourseButton courseId={id}>
+        <Button
+          className="absolute top-2 right-2 rounded-lg size-7"
+          size="icon"
+          variant="outline"
+        >
+          <X />
+        </Button>
+      </DeleteCourseButton>
 
       <Link href={`/courses/${id}`}>
         <CardHeader className="flex flex-row items-center space-x-4 pb-2">

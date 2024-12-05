@@ -19,6 +19,7 @@ import ManageUserModal from "@/app/users/[role]/_components/ManageUserModal";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { UserRole } from "@prisma/client";
+import DeleteCourseButton from "../_components/DeleteCourseButton";
 
 type Props = {
   params: {
@@ -44,7 +45,14 @@ export default async function CourseInfo({ params }: Props) {
           </div>
         </div>
 
-        {!isStudent && <ManageCourseModal defaultValues={course} />}
+        {!isStudent && (
+          <div className="flex items-center gap-2">
+            <ManageCourseModal defaultValues={course} />
+            <DeleteCourseButton courseId={params.courseId}>
+              <Button variant="outline">Delete</Button>
+            </DeleteCourseButton>
+          </div>
+        )}
       </div>
 
       <Card className="overflow-hidden">

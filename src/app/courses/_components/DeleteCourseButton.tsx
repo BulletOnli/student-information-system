@@ -21,9 +21,10 @@ import {
 
 type Props = {
   courseId: string;
+  children: React.ReactNode;
 };
 
-const DeleteCourseButton = ({ courseId }: Props) => {
+const DeleteCourseButton = ({ courseId, children }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
   const { isPending, execute } = useServerAction(deleteCourseAction);
@@ -53,29 +54,8 @@ const DeleteCourseButton = ({ courseId }: Props) => {
 
   return (
     <>
-      {/* {session?.user?.role === UserRole.ADMIN && (
-        <Button
-          className="absolute top-2 right-2 rounded-lg size-7"
-          size="icon"
-          aria-label="Delete Course"
-          variant="outline"
-          onClick={handleDelete}
-          disabled={isPending}
-        >
-          {isPending ? <Loader2 className="animate-spin" /> : <X />}
-        </Button>
-      )} */}
-
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-        <AlertDialogTrigger asChild>
-          <Button
-            className="absolute top-2 right-2 rounded-lg size-7"
-            size="icon"
-            variant="outline"
-          >
-            <X />
-          </Button>
-        </AlertDialogTrigger>
+        <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
