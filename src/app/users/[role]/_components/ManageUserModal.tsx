@@ -70,9 +70,9 @@ type RoleDefaults = {
 
 const formatRoleDefaults: RoleDefaults = {
   student: (defaults) => ({
-    courseId: defaults.course.id,
-    yearLevel: String(defaults.yearLevel),
-    section: defaults.section,
+    courseId: defaults?.course?.id,
+    yearLevel: String(defaults?.yearLevel),
+    section: defaults?.section,
   }),
 
   faculty: (defaults) => ({

@@ -96,9 +96,9 @@ export const StudentTableHeader = () => {
 export const StudentTableRow = ({ student }: { student: any }) => {
   return (
     <>
-      <TableCell>{student.course.code}</TableCell>
-      <TableCell>{student.yearLevel}</TableCell>
-      <TableCell>{student.section}</TableCell>
+      <TableCell>{student?.course && student?.course?.code}</TableCell>
+      <TableCell>{student?.course && student?.yearLevel}</TableCell>
+      <TableCell>{student?.course && student?.section}</TableCell>
     </>
   );
 };
@@ -115,8 +115,8 @@ export const FacultyTableHeader = () => {
 export const FacultyTableRow = ({ faculty }: { faculty: any }) => {
   return (
     <>
-      <TableCell>{faculty.department}</TableCell>
-      <TableCell>{faculty.position}</TableCell>
+      <TableCell>{faculty?.department}</TableCell>
+      <TableCell>{faculty?.position}</TableCell>
     </>
   );
 };

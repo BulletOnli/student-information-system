@@ -80,48 +80,54 @@ const UserDetails = async ({ userId }: Props) => {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-1">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Course ID
-                  </label>
-                  <p className="font-medium">{user?.student?.course?.id}</p>
+            {user.student?.course ? (
+              <div className="grid gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Course ID
+                    </label>
+                    <p className="font-medium">{user?.student?.course?.id}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Year Level
+                    </label>
+                    <p className="font-medium">{user?.student?.yearLevel}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Section
+                    </label>
+                    <p className="font-medium">{user?.student?.section}</p>
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <label className="text-sm font-medium text-muted-foreground">
-                    Year Level
+                    Course Code
                   </label>
-                  <p className="font-medium">{user?.student?.yearLevel}</p>
+                  <p className="font-medium">{user.student?.course?.code}</p>
                 </div>
                 <div className="space-y-1">
                   <label className="text-sm font-medium text-muted-foreground">
-                    Section
+                    Course Title
                   </label>
-                  <p className="font-medium">{user?.student?.section}</p>
+                  <p className="font-medium">{user.student?.course?.title}</p>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Course Description
+                  </label>
+                  <p className="font-medium">
+                    {user.student?.course?.description}
+                  </p>
                 </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">
-                  Course Code
-                </label>
-                <p className="font-medium">{user.student?.course?.code}</p>
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">
-                  Course Title
-                </label>
-                <p className="font-medium">{user.student?.course?.title}</p>
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">
-                  Course Description
-                </label>
-                <p className="font-medium">
-                  {user.student?.course?.description}
-                </p>
-              </div>
-            </div>
+            ) : (
+              <p className="text-muted-foreground">
+                The user is not enrolled in any course.
+              </p>
+            )}
           </CardContent>
         </Card>
       )}

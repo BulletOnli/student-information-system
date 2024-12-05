@@ -44,8 +44,8 @@ model Student {
   id         String       @id @default(cuid())
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String       @unique
-  course     Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId   String
+  course     Course?      @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  courseId   String?
   yearLevel  Int
   section    String
   reportCard ReportCard[]
