@@ -70,3 +70,12 @@ export const courseSchema = z.object({
 });
 
 export type Course = z.infer<typeof courseSchema>;
+
+//* SUBJECTS
+
+export const subjectSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  code: z.string(),
+  facultyId: z.string().nullable().optional(),
+});

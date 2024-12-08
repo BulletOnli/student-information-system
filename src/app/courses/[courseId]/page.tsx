@@ -4,22 +4,13 @@ import { Info } from "lucide-react";
 import { getCourseDetails } from "@/data-access/course";
 import NotFound from "@/app/not-found";
 import ManageCourseModal from "../_components/ManageCourseModal";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Eye, Users } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import ManageUserModal from "@/app/users/[role]/_components/ManageUserModal";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { UserRole } from "@prisma/client";
 import DeleteCourseButton from "../_components/DeleteCourseButton";
+import EnrolledStudentsTable from "./_components/EnrolledStudentsTable";
+import SubjectsTable from "./_components/SubjectsTable";
 
 type Props = {
   params: {
@@ -86,70 +77,13 @@ export default async function CourseInfo({ params }: Props) {
         </CardContent>
       </Card>
 
+      <SubjectsTable courseId={params.courseId} />
+
       {!isStudent && (
-        <Card>
-          <CardHeader className="bg-primary/5">
-            <CardTitle className="flex justify-between items-center gap-2">
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Enrolled Students
-                <Badge variant="secondary" className="ml-2">
-                  {course?.students.length}
-                </Badge>
-              </div>
-
-              <ManageUserModal role={"STUDENT"} courseId={course.id} />
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-2">
-            {course?.students?.length === 0 && (
-              <p className="text-center my-2 text-sm">
-                No enrolled students yet
-              </p>
-            )}
-
-            {course?.students?.length >= 1 && (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>First name</TableHead>
-                    <TableHead>Last name</TableHead>
-                    <TableHead>Year Level</TableHead>
-                    <TableHead>Section</TableHead>
-                    <TableHead className="lg:w-[7rem]">Status</TableHead>
-                    <TableHead className="text-center lg:w-[12rem] ">
-                      Action
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {course?.students.map((student) => (
-                    <TableRow key={student.id}>
-                      <TableCell className="font-medium">
-                        {student?.user?.firstName}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {student?.user?.lastName}
-                      </TableCell>
-                      <TableCell>{student?.yearLevel}</TableCell>
-                      <TableCell>{student?.section}</TableCell>
-                      <TableCell>
-                        <Badge>Enrolled</Badge>
-                      </TableCell>
-                      <TableCell className="flex items-center gap-1 justify-center">
-                        <Link href={`/user/${student?.user?.id}`}>
-                          <Button size="icon" variant="outline">
-                            <Eye />
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+        <EnrolledStudentsTable
+          students={course.students}
+          courseId={course.id}
+        />
       )}
     </div>
   );

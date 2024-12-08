@@ -54,24 +54,48 @@ model Student {
 }
 
 model Faculty {
-  id         String @id @default(cuid())
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String @unique
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String    @unique
   department String
   position   String
+  subjects   Subject[]
 
   @@map("faculties")
 }
 
 model Course {
-  id          String    @id @default(cuid())
-  code        String    @unique
+  id          String          @id @default(cuid())
+  code        String          @unique
   title       String
   description String
   students    Student[]
+  subjects    CourseSubject[]
 
   @@unique([code, title])
   @@map("courses")
+}
+
+model Subject {
+  id          String          @id @default(cuid())
+  code        String          @unique
+  title       String          @unique
+  description String
+  courses     CourseSubject[]
+  faculty     Faculty?        @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  facultyId   String?
+
+  @@map("subject")
+}
+
+model CourseSubject {
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId String
+
+  @@id([courseId, subjectId])
+  @@map("course_subjects")
 }
 
 model ReportCard {
