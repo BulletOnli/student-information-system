@@ -72,8 +72,7 @@ const DashboardSidebar = ({ user }: Props) => {
           <Avatar className="h-20 w-20 mb-4">
             <AvatarImage src={""} alt={user?.firstName} />
             <AvatarFallback className="bg-green-gradient text-white hover:text-white">
-              {user?.firstName?.[0]}
-              {user?.lastName?.[0]}
+              {user?.firstName?.[0]?.toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="space-y-1 text-center">

@@ -21,7 +21,10 @@ async function AnnouncementsList() {
         <p>No announcements yet.</p>
       ) : (
         announcements.map((announcement) => (
-          <Card className="w-full max-w-2xl mx-auto border-commonGreen/30">
+          <Card
+            key={announcement.id}
+            className="w-full max-w-2xl mx-auto border-commonGreen/30"
+          >
             <CardHeader className="py-4 pb-2">
               <CardTitle className="text-xl font-bold text-commonGreen">
                 {announcement?.title}
