@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,11 @@ const announcementSchema = z.object({
 
 type AnnouncementFormData = z.infer<typeof announcementSchema>;
 
-export function CreateAnnouncementModal() {
+type Props = {
+  children: ReactNode;
+};
+
+export function CreateAnnouncementModal({ children }: Props) {
   const [open, setOpen] = useState(false);
   const { isPending, execute } = useServerAction(createAnnouncementAction);
   const { data: session } = useSession();
@@ -73,9 +77,7 @@ export function CreateAnnouncementModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Create Announcement</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Announcement</DialogTitle>

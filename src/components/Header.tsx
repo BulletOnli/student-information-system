@@ -17,9 +17,7 @@ const Header = () => {
     <header className="sticky top-0 w-full bg-background border-b ">
       <div className="mx-auto px-4 sm:px-8 ">
         <div className="flex items-center justify-between h-16">
-          <div className="font-semibold">
-            <SearchBar />
-          </div>
+          <SearchBar />
 
           <UserNav />
         </div>

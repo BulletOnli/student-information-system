@@ -87,9 +87,7 @@ const ManageCourseModal = ({ defaultValues }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          {defaultValues ? "Edit Course" : "Add Course"}
-        </Button>
+        <Button>{defaultValues ? "Edit Course" : "Add Course"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

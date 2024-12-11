@@ -8,9 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users } from "lucide-react";
+import { ChevronRight, Users } from "lucide-react";
 import { getCourseSubjects } from "@/data-access/subject";
 import ManageSubjectModal from "./ManageSubjectModal";
+import { auth } from "@/auth";
+import { UserRole } from "@prisma/client";
+import Link from "next/link";
 
 type Props = {
   courseId: string;
@@ -18,10 +21,12 @@ type Props = {
 
 const SubjectsTable = async ({ courseId }: Props) => {
   const subjects = await getCourseSubjects(courseId);
+  const session = await auth();
+  const isAdmin = session?.user?.role === UserRole.ADMIN;
 
   return (
-    <Card>
-      <CardHeader className="bg-primary/5">
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-green-gradient text-white ">
         <CardTitle className="flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -31,7 +36,7 @@ const SubjectsTable = async ({ courseId }: Props) => {
             </Badge>
           </div>
 
-          <ManageSubjectModal courseId={courseId} />
+          {isAdmin && <ManageSubjectModal courseId={courseId} />}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-2">
@@ -61,16 +66,25 @@ const SubjectsTable = async ({ courseId }: Props) => {
                     {subject.faculty?.user.lastName}
                   </TableCell>
                   <TableCell className="flex items-center gap-1 justify-center">
-                    <ManageSubjectModal
-                      courseId={courseId}
-                      defaultValues={subject}
-                    />
+                    {isAdmin && (
+                      <ManageSubjectModal
+                        courseId={courseId}
+                        defaultValues={subject}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         )}
+        <Link
+          href={`/courses/${courseId}/subjects`}
+          className="flex items-center gap-1 w-fit mx-auto font-medium my-2 hover:scale-[1.02] ease-in"
+        >
+          <p className="text-center text-sm mx-auto">View Subjects page</p>
+          <ChevronRight className="size-5" />
+        </Link>
       </CardContent>
     </Card>
   );

@@ -43,3 +43,7 @@ export const createCourseSubject = async (
 ) => {
   return await prisma.courseSubject.create({ data });
 };
+
+export const deleteSubject = async (id: string) => {
+  return await prisma.subject.delete({ where: { id } });
+};

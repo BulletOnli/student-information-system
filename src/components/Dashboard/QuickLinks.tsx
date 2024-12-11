@@ -30,7 +30,7 @@ export function QuickLinks() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Quick Links</CardTitle>
+        <CardTitle className="text-commonGreen">Quick Links</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">
@@ -38,11 +38,11 @@ export function QuickLinks() {
             <Button
               key={link.title}
               variant="ghost"
-              className="w-full justify-start"
+              className="w-full justify-start text-commonGreen/80"
               asChild
             >
               <Link target="_blank" href={link.href}>
-                <link.icon className="mr-2 h-4 w-4" />
+                <link.icon className="mr-2 h-4 w-4" color="#166534" />
                 {link.title}
               </Link>
             </Button>

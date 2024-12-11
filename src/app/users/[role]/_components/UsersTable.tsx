@@ -29,12 +29,14 @@ const UsersTable = async ({ role }: Props) => {
   const users = await getAllUsers(role);
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-green-gradient text-white ">
         <CardTitle>Existing Users</CardTitle>
-        <CardDescription>A list of all users in the system.</CardDescription>
+        <CardDescription className="text-white">
+          A list of all users in the system.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -64,7 +66,7 @@ const UsersTable = async ({ role }: Props) => {
                 )}
                 <TableCell className="flex items-center gap-1 justify-center">
                   <Link href={`/user/${user.id}`}>
-                    <Button size="icon" variant="outline">
+                    <Button size="icon">
                       <Eye />
                     </Button>
                   </Link>

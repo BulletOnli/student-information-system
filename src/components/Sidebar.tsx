@@ -66,12 +66,12 @@ const DashboardSidebar = ({ user }: Props) => {
   };
 
   return (
-    <Sidebar className="border-r bg-gray-50/50 dark:bg-gray-900/50">
+    <Sidebar className="border-r">
       <SidebarHeader className="border-b p-6">
         <div className="flex flex-col items-center text-center">
           <Avatar className="h-20 w-20 mb-4">
             <AvatarImage src={""} alt={user?.firstName} />
-            <AvatarFallback>
+            <AvatarFallback className="bg-green-gradient text-white hover:text-white">
               {user?.firstName?.[0]}
               {user?.lastName?.[0]}
             </AvatarFallback>
@@ -80,10 +80,8 @@ const DashboardSidebar = ({ user }: Props) => {
             <h2 className="text-lg font-semibold">
               {user?.firstName} {user?.lastName}
             </h2>
-            <p className="text-sm text-muted-foreground">{user?.email}</p>
-            <p className="text-sm font-medium text-muted-foreground">
-              {user?.role}
-            </p>
+            <p className="text-sm ">{user?.email}</p>
+            <p className="text-sm font-medium ">{user?.role}</p>
           </div>
         </div>
       </SidebarHeader>
@@ -96,16 +94,21 @@ const DashboardSidebar = ({ user }: Props) => {
 
             return (
               <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild>
-                  <a
+                <SidebarMenuButton
+                  asChild
+                  className="px-4 py-6 rounded-lg font-semibold"
+                >
+                  <Link
                     href={item.href}
-                    className={`${isTabActive(
-                      item.href
-                    )} flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800`}
+                    className={`flex items-center gap-3 rounded-lg text-sm transition-colors ${
+                      isTabActive(item.href)
+                        ? "bg-green-gradient text-white hover:text-white"
+                        : "hover:bg-green-gradient hover:text-white"
+                    }`}
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );
@@ -115,42 +118,50 @@ const DashboardSidebar = ({ user }: Props) => {
             <SidebarMenuItem>
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1" className="border-none">
-                  <AccordionTrigger className=" flex w-full items-center justify-start gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-secondary hover:no-underline">
+                  <AccordionTrigger className=" flex w-full items-center justify-start gap-3 rounded-lg px-3 py-4 text-sm transition-colors hover:no-underline">
                     <UserIcon className="h-4 w-4" />
                     Users
                   </AccordionTrigger>
 
-                  <Link href="/users/student">
-                    <AccordionContent className="pl-4 pb-0">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start gap-3 text-sm"
-                      >
-                        <UserIcon className="h-4 w-4" />
-                        Student
-                      </Button>
+                  <Link
+                    href="/users/student"
+                    className={`flex items-center gap-3 rounded-lg text-sm transition-colors ${
+                      isTabActive("/users/student")
+                        ? "bg-green-gradient text-white hover:text-white"
+                        : "hover:bg-green-gradient hover:text-white"
+                    }`}
+                  >
+                    <AccordionContent className="flex items-center gap-2 px-4 py-4">
+                      <UserIcon className="h-4 w-4" />
+                      Student
                     </AccordionContent>
                   </Link>
-                  <Link href="/users/faculty">
-                    <AccordionContent className="pl-4 pb-0">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start gap-3 text-sm"
-                      >
-                        <UserIcon className="h-4 w-4" />
-                        Faculty
-                      </Button>
+
+                  <Link
+                    href="/users/faculty"
+                    className={`flex items-center gap-3 rounded-lg text-sm transition-colors ${
+                      isTabActive("/users/faculty")
+                        ? "bg-green-gradient text-white hover:text-white"
+                        : "hover:bg-green-gradient hover:text-white"
+                    }`}
+                  >
+                    <AccordionContent className="flex items-center gap-2 px-4 py-4">
+                      <UserIcon className="h-4 w-4" />
+                      Faculty
                     </AccordionContent>
                   </Link>
-                  <Link href="/users/admin">
-                    <AccordionContent className="pl-4 pb-0">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start gap-3 text-sm"
-                      >
-                        <UserIcon className="h-4 w-4" />
-                        Admin
-                      </Button>
+
+                  <Link
+                    href="/users/admin"
+                    className={`flex items-center gap-3 rounded-lg text-sm transition-colors ${
+                      isTabActive("/users/admin")
+                        ? "bg-green-gradient text-white hover:text-white"
+                        : "hover:bg-green-gradient hover:text-white"
+                    }`}
+                  >
+                    <AccordionContent className="flex items-center gap-2 px-4 py-4">
+                      <UserIcon className="h-4 w-4" />
+                      Admin
                     </AccordionContent>
                   </Link>
                 </AccordionItem>
@@ -162,7 +173,7 @@ const DashboardSidebar = ({ user }: Props) => {
       <SidebarFooter className="border-t p-4">
         <Button
           variant="ghost"
-          className="w-full justify-start gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="w-full justify-start gap-3 rounded-lg px-3 py-4 text-sm transition-colors hover:bg-green-gradient hover:text-white"
           onClick={() => signOut()}
         >
           <LogOut className="h-4 w-4" />

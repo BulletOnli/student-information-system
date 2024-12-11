@@ -3,7 +3,11 @@ import { Course } from "@/lib/zod";
 import { Prisma } from "@prisma/client";
 
 export const getAllCourses = async () => {
-  return await prisma.course.findMany();
+  return await prisma.course.findMany({
+    include: {
+      _count: true,
+    },
+  });
 };
 
 export const getCourseDetails = async (id: string) => {

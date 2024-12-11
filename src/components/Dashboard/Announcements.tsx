@@ -3,9 +3,21 @@ import { getAllAnnouncements } from "@/data-access/announcement";
 import { formatDate } from "@/utils/formatDate";
 import { ArrowRight, Bell } from "lucide-react";
 import Link from "next/link";
+import AnnouncementCard from "../AnnouncementCard";
 
 export async function Announcements() {
   const announcements = await getAllAnnouncements();
+
+  const latestAnnouncement = announcements?.pop();
+
+  if (!latestAnnouncement) return null;
+
+  return (
+    <AnnouncementCard
+      title={latestAnnouncement?.title}
+      content={latestAnnouncement?.content}
+    />
+  );
 
   return (
     <Card>

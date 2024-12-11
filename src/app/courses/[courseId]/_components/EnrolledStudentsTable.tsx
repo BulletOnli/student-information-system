@@ -30,8 +30,8 @@ type Props = {
 
 const EnrolledStudentsTable = ({ students, courseId }: Props) => {
   return (
-    <Card>
-      <CardHeader className="bg-primary/5">
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-green-gradient text-white ">
         <CardTitle className="flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -79,7 +79,7 @@ const EnrolledStudentsTable = ({ students, courseId }: Props) => {
                   </TableCell>
                   <TableCell className="flex items-center gap-1 justify-center">
                     <Link href={`/user/${student?.user?.id}`}>
-                      <Button size="icon" variant="outline">
+                      <Button size="icon">
                         <Eye />
                       </Button>
                     </Link>

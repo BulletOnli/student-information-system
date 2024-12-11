@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Info } from "lucide-react";
+import { ArrowLeft, Info } from "lucide-react";
 import { getCourseDetails } from "@/data-access/course";
 import NotFound from "@/app/not-found";
 import ManageCourseModal from "../_components/ManageCourseModal";
@@ -11,6 +11,7 @@ import { UserRole } from "@prisma/client";
 import DeleteCourseButton from "../_components/DeleteCourseButton";
 import EnrolledStudentsTable from "./_components/EnrolledStudentsTable";
 import SubjectsTable from "./_components/SubjectsTable";
+import Link from "next/link";
 
 type Props = {
   params: {
@@ -22,12 +23,20 @@ export default async function CourseInfo({ params }: Props) {
   const session = await auth();
   if (!session?.user) redirect("/login");
   const isStudent = session.user?.role === UserRole.STUDENT;
+  const isAdmin = session.user?.role === UserRole.ADMIN;
 
   const course = await getCourseDetails(params.courseId);
   if (!course) return <NotFound />;
 
   return (
     <div className="container mx-auto p-6 space-y-8">
+      <Button asChild size="sm">
+        <Link href={`/courses`}>
+          <ArrowLeft />
+          <p>Go back</p>
+        </Link>
+      </Button>
+
       <div className="flex flex-col md:flex-row justify-between items-start gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{course.title}</h1>
@@ -36,7 +45,7 @@ export default async function CourseInfo({ params }: Props) {
           </div>
         </div>
 
-        {!isStudent && (
+        {isAdmin && (
           <div className="flex items-center gap-2">
             <ManageCourseModal defaultValues={course} />
             <DeleteCourseButton courseId={params.courseId}>
@@ -47,7 +56,7 @@ export default async function CourseInfo({ params }: Props) {
       </div>
 
       <Card className="overflow-hidden">
-        <CardHeader className="bg-primary/5">
+        <CardHeader className="bg-green-gradient text-white ">
           <CardTitle className="flex items-center gap-2">
             <Info className="h-5 w-5" />
             Course Details

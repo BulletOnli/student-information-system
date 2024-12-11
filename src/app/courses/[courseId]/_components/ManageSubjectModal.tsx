@@ -90,7 +90,7 @@ const ManageSubjectModal: FC<Props> = ({ courseId, defaultValues }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="text-black">
           {defaultValues ? (
             <Pencil className="size-4" />
           ) : (
