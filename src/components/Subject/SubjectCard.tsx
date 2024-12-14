@@ -29,8 +29,6 @@ export async function SubjectCard({
   id,
   faculty,
 }: SubjectCardProps) {
-  const session = await auth();
-
   return (
     <Card className="relative min-h-[10rem] bg-green-gradient text-white transition-colors flex flex-col">
       <DeleteSubjectButton subjectId={id}>
@@ -57,14 +55,12 @@ export async function SubjectCard({
         </div>
       </CardHeader>
       <CardContent className="flex justify-end items-end mx-4 px-2">
-        {session?.user?.role === UserRole.ADMIN && (
-          <div className="text-end ">
-            <p className="font-semibold ">
-              {faculty?.user?.firstName} {faculty?.user?.lastName}
-            </p>
-            <p className="text-sm">Subject Teacher</p>
-          </div>
-        )}
+        <div className="text-end ">
+          <p className="font-semibold ">
+            {faculty?.user?.firstName} {faculty?.user?.lastName}
+          </p>
+          <p className="text-sm">Subject Teacher</p>
+        </div>
       </CardContent>
     </Card>
   );

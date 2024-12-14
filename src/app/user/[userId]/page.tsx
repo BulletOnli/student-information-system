@@ -1,4 +1,5 @@
 import NotFound from "@/app/not-found";
+import { auth } from "@/auth";
 import StudentDetails from "@/components/UserDetails";
 import { getStudentDetails } from "@/data-access/user";
 import { redirect } from "next/navigation";
@@ -11,6 +12,11 @@ type Props = {
 };
 
 const UserDetailsPage = async ({ params }: Props) => {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const user = await getStudentDetails(params.userId);
 
   if (!user) {

@@ -20,6 +20,7 @@ type ExtendedStudent = Student & {
     lastName: string;
     id: string;
     email: string;
+    schoolId: string;
   };
 };
 
@@ -53,6 +54,7 @@ const EnrolledStudentsTable = ({ students, courseId }: Props) => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>School ID</TableHead>
                 <TableHead>First name</TableHead>
                 <TableHead>Last name</TableHead>
                 <TableHead>Year Level</TableHead>
@@ -66,6 +68,7 @@ const EnrolledStudentsTable = ({ students, courseId }: Props) => {
             <TableBody>
               {students.map((student) => (
                 <TableRow key={student.id}>
+                  <TableCell>{student.user.schoolId}</TableCell>
                   <TableCell className="font-medium">
                     {student?.user?.firstName}
                   </TableCell>
