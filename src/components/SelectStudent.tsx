@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Select,
@@ -9,34 +10,43 @@ import {
 import { FormControl } from "./ui/form";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Course } from "@prisma/client";
+
+type UserProps = {
+  id: string;
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+};
 
 type SelectProps = {
-  value?: string;
+  value?: string | null | undefined;
   onChange?: (value: string) => void;
   onBlur?: () => void;
   disabled?: boolean;
   name?: string;
 };
 
-const SelectCourse = ({
+const SelectStudent = ({
   value,
   onChange,
   onBlur,
   disabled,
   name,
 }: SelectProps) => {
-  const courseQuery = useQuery<Course[]>({
-    queryKey: ["courses"],
+  const userQuery = useQuery<UserProps[]>({
+    queryKey: ["students"],
     queryFn: async () => {
-      const response = await axios.get("/api/courses");
+      const response = await axios.get("/api/user/students");
       return response.data;
     },
   });
 
   return (
     <Select
-      value={value}
+      value={value ?? ""}
       onValueChange={onChange}
       name={name}
       disabled={disabled}
@@ -46,25 +56,25 @@ const SelectCourse = ({
     >
       <FormControl>
         <SelectTrigger>
-          <SelectValue placeholder="Select course" />
+          <SelectValue placeholder="Select student" />
         </SelectTrigger>
       </FormControl>
       <SelectContent>
-        {courseQuery.isLoading && (
+        {userQuery.isLoading && (
           <SelectItem value="test" disabled>
             Loading...
           </SelectItem>
         )}
 
-        {courseQuery.data?.length === 0 && (
+        {userQuery.data?.length === 0 && (
           <SelectItem value="test" disabled>
-            NO AVAILABLE COURSES
+            NO AVAILABLE FACULTY
           </SelectItem>
         )}
 
-        {courseQuery.data?.map((course) => (
-          <SelectItem key={course.id} value={course.id}>
-            {course.code}
+        {userQuery.data?.map(({ id: studentId, user }) => (
+          <SelectItem key={studentId} value={studentId}>
+            {user.firstName} {user.lastName}
           </SelectItem>
         ))}
       </SelectContent>
@@ -72,4 +82,4 @@ const SelectCourse = ({
   );
 };
 
-export default SelectCourse;
+export default SelectStudent;

@@ -23,6 +23,7 @@ export const getCourseDetails = async (id: string) => {
               lastName: true,
               email: true,
               schoolId: true,
+              password: true,
             },
           },
         },

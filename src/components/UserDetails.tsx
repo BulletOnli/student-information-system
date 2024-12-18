@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserDetails } from "@/data-access/user";
 import { Faculty, UserRole, User as UserType } from "@prisma/client";
-import { GraduationCap, IdCard, Mail, User } from "lucide-react";
+import { BookOpen, GraduationCap, IdCard, Mail, User } from "lucide-react";
 import React from "react";
 
 type Props = {
@@ -133,6 +133,38 @@ const UserDetails = async ({ userId }: Props) => {
               </p>
             )}
           </CardContent>
+        </Card>
+      )}
+
+      {/* Enrolled Subjects Card */}
+      {user.role === UserRole.STUDENT && (
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="h-5 w-5 text-green-700" />
+            <h2 className="text-green-700 font-medium">Enrolled Subjects</h2>
+          </div>
+
+          <div className="divide-y">
+            {user.student?.subjects.map((subject, index) => (
+              <div key={index} className="py-4 first:pt-0 last:pb-0">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="font-medium">{subject.title}</div>
+                    <div className="text-sm text-gray-500">{subject.code}</div>
+                  </div>
+                  <div className="text-sm bg-green-50 text-green-700 px-2 py-1 rounded">
+                    {subject.code} units
+                  </div>
+                </div>
+                <div className="mt-2 text-sm text-gray-500">
+                  <div>
+                    {subject.faculty?.user.firstName}{" "}
+                    {subject.faculty?.user.lastName}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
       )}
     </div>

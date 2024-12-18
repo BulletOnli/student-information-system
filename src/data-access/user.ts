@@ -9,6 +9,21 @@ export const getUserDetails = async (userId: string) => {
         include: {
           course: true,
           reportCard: true,
+          subjects: {
+            include: {
+              faculty: {
+                select: {
+                  user: {
+                    select: {
+                      id: true,
+                      firstName: true,
+                      lastName: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
       faculty: true,

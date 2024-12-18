@@ -93,15 +93,12 @@ const DashboardSidebar = ({ user }: Props) => {
 
             return (
               <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  className="px-4 py-6 rounded-lg font-semibold"
-                >
+                <SidebarMenuButton asChild className="px-4 py-6 rounded-lg">
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 rounded-lg text-sm transition-colors ${
                       isTabActive(item.href)
-                        ? "bg-green-gradient text-white hover:text-white"
+                        ? "bg-green-gradient text-white hover:text-white "
                         : "hover:bg-green-gradient hover:text-white"
                     }`}
                   >

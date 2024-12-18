@@ -49,6 +49,7 @@ model Student {
   yearLevel  Int
   section    String
   reportCard ReportCard[]
+  subjects   Subject[]
 
   @@map("students")
 }
@@ -84,6 +85,7 @@ model Subject {
   courses     CourseSubject[]
   faculty     Faculty?        @relation(fields: [facultyId], references: [id], onDelete: SetNull)
   facultyId   String?
+  students    Student[]
 
   @@map("subject")
 }

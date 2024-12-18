@@ -35,7 +35,7 @@ export default function RootLayout({
           </SidebarProvider>
 
           <Toaster />
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <ReactQueryDevtools initialIsOpen={false} />
         </GlobalProviders>
       </body>
     </html>

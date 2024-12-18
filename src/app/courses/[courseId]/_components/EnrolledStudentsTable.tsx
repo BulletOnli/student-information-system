@@ -54,12 +54,11 @@ const EnrolledStudentsTable = ({ students, courseId }: Props) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>School ID</TableHead>
+                <TableHead className="w-[12rem]">School ID</TableHead>
                 <TableHead>First name</TableHead>
                 <TableHead>Last name</TableHead>
                 <TableHead>Year Level</TableHead>
                 <TableHead>Section</TableHead>
-                <TableHead className="lg:w-[7rem]">Status</TableHead>
                 <TableHead className="text-center lg:w-[12rem] ">
                   Action
                 </TableHead>
@@ -77,15 +76,22 @@ const EnrolledStudentsTable = ({ students, courseId }: Props) => {
                   </TableCell>
                   <TableCell>{student?.yearLevel}</TableCell>
                   <TableCell>{student?.section}</TableCell>
-                  <TableCell>
-                    <Badge>Enrolled</Badge>
-                  </TableCell>
                   <TableCell className="flex items-center gap-1 justify-center">
                     <Link href={`/user/${student?.user?.id}`}>
                       <Button size="icon">
                         <Eye />
                       </Button>
                     </Link>
+                    <ManageUserModal
+                      defaultValues={{
+                        ...student,
+                        ...student?.user,
+                        yearLevel: student?.yearLevel?.toString(),
+                        role: "STUDENT",
+                      }}
+                      role={"STUDENT"}
+                      courseId={courseId}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
