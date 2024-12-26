@@ -25,7 +25,6 @@ import SelectCourse from "@/components/SelectCourse";
 import SelectStudent from "@/components/SelectStudent";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
 import { CourseSubject } from "@/types";
 import { useServerAction } from "zsa-react";
 import { assignSubjectsAction } from "../action";
@@ -46,21 +45,28 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const AssignSubjectsForm = () => {
-  const [submittedData, setSubmittedData] = useState<z.infer<
-    typeof formSchema
-  > | null>(null);
-  const searchParams = useSearchParams();
   const { isPending, execute } = useServerAction(assignSubjectsAction);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       subjects: [],
-      courseId: searchParams.get("courseId") ?? "",
+      courseId: "",
+      studentId: "",
     },
   });
 
-  const courseId = searchParams.get("courseId") ?? form.getValues("courseId");
+  const studentId = form.watch("studentId");
+
+  const studentQuery = useQuery<any>({
+    queryKey: ["student", studentId],
+    queryFn: async () => {
+      const response = await axios(`/api/user/students/${studentId}`);
+      return response.data;
+    },
+  });
+
+  const courseId = studentQuery.data?.courseId;
 
   const subjectsQuery = useQuery<CourseSubject[]>({
     queryKey: ["subjects", courseId],
@@ -68,6 +74,7 @@ const AssignSubjectsForm = () => {
       const response = await axios.get(`/api/subjects/${courseId}`);
       return response.data;
     },
+    enabled: !!courseId,
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -108,88 +115,106 @@ const AssignSubjectsForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Student</FormLabel>
-                  <SelectStudent {...field} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="courseId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course</FormLabel>
-                  <SelectCourse {...field} />
+                  <SelectStudent
+                    {...field}
+                    onChange={(val) => {
+                      form.setValue("studentId", val);
+                      form.setValue("subjects", []);
+                    }}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             {courseId && (
-              <FormField
-                control={form.control}
-                name="subjects"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel className="text-base">Subjects</FormLabel>
-                      <FormDescription>
-                        Select the subjects you want to assign.
-                      </FormDescription>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {subjectsQuery.isLoading && (
-                        <FormMessage className="col-span-2">
-                          Loading...
-                        </FormMessage>
-                      )}
+              <>
+                <FormField
+                  control={form.control}
+                  name="courseId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Course</FormLabel>
+                      <SelectCourse {...field} value={courseId} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                      {subjectsQuery?.data?.map(
-                        ({ subject, courseId }, index) => (
-                          <FormField
-                            key={index}
-                            control={form.control}
-                            name="subjects"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={index + courseId}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(
-                                        subject?.id
-                                      )}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...field.value,
-                                              subject?.id,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== subject?.id
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {subject?.code} - {subject?.title}
-                                  </FormLabel>
-                                </FormItem>
+                <FormField
+                  control={form.control}
+                  name="subjects"
+                  render={() => (
+                    <FormItem>
+                      <div className="mb-4">
+                        <FormLabel className="text-base">Subjects</FormLabel>
+                        <FormDescription>
+                          Select the subjects you want to assign.
+                        </FormDescription>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {subjectsQuery.isLoading && (
+                          <FormMessage className="col-span-2">
+                            Loading...
+                          </FormMessage>
+                        )}
+
+                        {subjectsQuery?.data?.map(
+                          ({ subject, courseId }, index) => {
+                            const isAlreadyEnrolled =
+                              studentQuery.data?.enrolledSubjects?.some(
+                                (subj: { subjectId: string }) =>
+                                  subj.subjectId === subject.id
                               );
-                            }}
-                          />
-                        )
-                      )}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+                            return (
+                              <FormField
+                                key={index}
+                                control={form.control}
+                                name="subjects"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={index + courseId}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(
+                                            subject?.id
+                                          )}
+                                          disabled={isAlreadyEnrolled}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([
+                                                  ...field.value,
+                                                  subject?.id,
+                                                ])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) =>
+                                                      value !== subject?.id
+                                                  )
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {subject?.code} - {subject?.title}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            );
+                          }
+                        )}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
             )}
           </CardContent>
           <CardFooter>
@@ -199,14 +224,6 @@ const AssignSubjectsForm = () => {
           </CardFooter>
         </form>
       </Form>
-      {submittedData && (
-        <CardContent>
-          <h3 className="font-semibold mb-2">Submitted Data:</h3>
-          <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            {JSON.stringify(submittedData, null, 2)}
-          </pre>
-        </CardContent>
-      )}
     </Card>
   );
 };

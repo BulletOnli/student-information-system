@@ -145,16 +145,16 @@ const UserDetails = async ({ userId }: Props) => {
           </div>
 
           <div className="divide-y">
-            {user.student?.subjects.map((subject, index) => (
+            {user.student?.enrolledSubjects.map(({ subject }, index) => (
               <div key={index} className="py-4 first:pt-0 last:pb-0">
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="font-medium">{subject.title}</div>
                     <div className="text-sm text-gray-500">{subject.code}</div>
                   </div>
-                  <div className="text-sm bg-green-50 text-green-700 px-2 py-1 rounded">
+                  {/* <div className="text-sm bg-green-50 text-green-700 px-2 py-1 rounded">
                     {subject.code} units
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mt-2 text-sm text-gray-500">
                   <div>

@@ -8,16 +8,19 @@ export const getUserDetails = async (userId: string) => {
       student: {
         include: {
           course: true,
-          reportCard: true,
-          subjects: {
+          enrolledSubjects: {
             include: {
-              faculty: {
-                select: {
-                  user: {
+              subject: {
+                include: {
+                  faculty: {
                     select: {
-                      id: true,
-                      firstName: true,
-                      lastName: true,
+                      user: {
+                        select: {
+                          id: true,
+                          firstName: true,
+                          lastName: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -38,7 +41,6 @@ export const getStudentDetails = async (userId: string) => {
       student: {
         include: {
           course: true,
-          reportCard: true,
         },
       },
     },

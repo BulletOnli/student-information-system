@@ -20,6 +20,17 @@ enum UserRole {
   ADMIN
 }
 
+enum AcademicQuarter {
+  PRELIMS
+  MIDTERMS
+  FINALS
+}
+
+enum Semester {
+  FIRST
+  SECOND
+}
+
 model User {
   id           String         @id @default(cuid())
   schoolId     String         @unique
@@ -41,15 +52,14 @@ model User {
 }
 
 model Student {
-  id         String       @id @default(cuid())
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String       @unique
-  course     Course?      @relation(fields: [courseId], references: [id], onDelete: SetNull)
-  courseId   String?
-  yearLevel  Int
-  section    String
-  reportCard ReportCard[]
-  subjects   Subject[]
+  id               String            @id @default(cuid())
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String            @unique
+  course           Course?           @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  courseId         String?
+  yearLevel        Int
+  section          String
+  enrolledSubjects EnrolledSubject[]
 
   @@map("students")
 }
@@ -78,14 +88,14 @@ model Course {
 }
 
 model Subject {
-  id          String          @id @default(cuid())
-  code        String          @unique
-  title       String          @unique
-  description String
-  courses     CourseSubject[]
-  faculty     Faculty?        @relation(fields: [facultyId], references: [id], onDelete: SetNull)
-  facultyId   String?
-  students    Student[]
+  id              String            @id @default(cuid())
+  code            String            @unique
+  title           String            @unique
+  description     String
+  courses         CourseSubject[]
+  faculty         Faculty?          @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  facultyId       String?
+  enrolledSubject EnrolledSubject[]
 
   @@map("subject")
 }
@@ -100,27 +110,26 @@ model CourseSubject {
   @@map("course_subjects")
 }
 
-model ReportCard {
-  id           String  @id @default(cuid())
-  student      Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId    String
-  grades       Grade[]
-  academicYear String
-  semester     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("report_cards")
+model EnrolledSubject {
+  id        String  @id @default(cuid())
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  grades    Grade[]
 }
 
 model Grade {
-  id           String     @id @default(cuid())
-  reportCard   ReportCard @relation(fields: [reportCardId], references: [id], onDelete: Cascade)
-  reportCardId String
-  subject      String
-  grade        Float
+  id                String           @id @default(cuid())
+  enrolledSubjectId String
+  enrolledSubject   EnrolledSubject? @relation(fields: [enrolledSubjectId], references: [id], onDelete: Cascade)
+  semester          Semester
+  quarter           AcademicQuarter
+  grade             Float
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
+  @@unique([semester, quarter, enrolledSubjectId])
   @@map("grades")
 }
 

@@ -68,7 +68,7 @@ const SelectStudent = ({
 
         {userQuery.data?.length === 0 && (
           <SelectItem value="test" disabled>
-            NO AVAILABLE FACULTY
+            NO AVAILABLE STUDENTS
           </SelectItem>
         )}
 

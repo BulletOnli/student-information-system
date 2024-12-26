@@ -10,18 +10,27 @@ export const assignSubjectsAction = createServerAction()
   .handler(async ({ input }) => {
     const { selectedSubjects } = input;
 
-    selectedSubjects.forEach(async (subjectId) => {
-      await prisma.student.update({
-        where: {
-          id: input.studentId,
-        },
-        data: {
-          subjects: {
-            connect: {
-              id: subjectId,
+    await prisma.$transaction(async (prisma) => {
+      return Promise.all(
+        selectedSubjects.map(async (subjectId) => {
+          const enrollment = await prisma.enrolledSubject.findFirst({
+            where: {
+              studentId: input.studentId,
+              subjectId,
             },
-          },
-        },
-      });
+          });
+
+          if (enrollment) {
+            return enrollment; // Skip if already enrolled
+          }
+
+          return prisma.enrolledSubject.create({
+            data: {
+              studentId: input.studentId,
+              subjectId,
+            },
+          });
+        })
+      );
     });
   });
