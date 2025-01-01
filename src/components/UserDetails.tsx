@@ -6,6 +6,8 @@ import { getUserDetails } from "@/data-access/user";
 import { Faculty, UserRole, User as UserType } from "@prisma/client";
 import { BookOpen, GraduationCap, IdCard, Mail, User } from "lucide-react";
 import React from "react";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 type Props = {
   userId: string;
@@ -139,9 +141,15 @@ const UserDetails = async ({ userId }: Props) => {
       {/* Enrolled Subjects Card */}
       {user.role === UserRole.STUDENT && (
         <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="h-5 w-5 text-green-700" />
-            <h2 className="text-green-700 font-medium">Enrolled Subjects</h2>
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <div className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-green-700" />
+              <h2 className="text-green-700 font-medium">Enrolled Subjects</h2>
+            </div>
+
+            <Button size="sm" asChild>
+              <Link href={`/grades/${user.student?.id}`}>View Grades</Link>
+            </Button>
           </div>
 
           <div className="divide-y">
@@ -165,6 +173,10 @@ const UserDetails = async ({ userId }: Props) => {
               </div>
             ))}
           </div>
+
+          {user.student?.enrolledSubjects.length === 0 && (
+            <p className="text-green-700">No enrolled subjects yet.</p>
+          )}
         </Card>
       )}
     </div>

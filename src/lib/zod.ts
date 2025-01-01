@@ -79,3 +79,16 @@ export const subjectSchema = z.object({
   code: z.string(),
   facultyId: z.string().nullable().optional(),
 });
+
+export const gradeFormSchema = z.object({
+  enrolledSubjectId: z.string().min(1, "Enrolled Subject ID is required"),
+  semester: z.enum(["FIRST", "SECOND"], {
+    required_error: "Please select a semester",
+  }),
+  quarter: z.enum(["PRELIMS", "MIDTERMS", "FINALS"], {
+    required_error: "Please select a quarter",
+  }),
+  grade: z.number().min(1).max(5).step(0.25),
+});
+
+export type GradeFormValues = z.infer<typeof gradeFormSchema>;

@@ -38,11 +38,24 @@ const navigation = [
     prohibitedRoles: [] as UserRole[],
   },
   {
+    title: "View Grades",
+    icon: BookOpen,
+    href: "/grades",
+    prohibitedRoles: [UserRole.ADMIN, UserRole.FACULTY] as UserRole[],
+  },
+  {
     title: "Courses",
     icon: BookOpen,
     href: "/courses",
     prohibitedRoles: [] as UserRole[],
   },
+  {
+    title: "Assign Subjects",
+    icon: BookOpen,
+    href: "/assign/subjects",
+    prohibitedRoles: [UserRole.ADMIN, UserRole.STUDENT] as UserRole[],
+  },
+
   {
     title: "Announcements",
     icon: Megaphone,
@@ -61,8 +74,10 @@ const DashboardSidebar = ({ user }: Props) => {
     return null;
   }
 
-  const isTabActive = (route: string) => {
-    return pathname.toLowerCase() === route.toLowerCase() && "bg-gray-100";
+  const isTabActive = (route: string): string | false => {
+    const isExactMatch = pathname.toLowerCase() === route.toLowerCase();
+    const isIncluded = route !== "/" && pathname.includes(route);
+    return isExactMatch || isIncluded ? "bg-gray-100" : false;
   };
 
   return (
