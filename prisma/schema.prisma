@@ -124,12 +124,12 @@ model Grade {
   enrolledSubjectId String
   enrolledSubject   EnrolledSubject? @relation(fields: [enrolledSubjectId], references: [id], onDelete: Cascade)
   semester          Semester
-  quarter           AcademicQuarter
+  // quarter           AcademicQuarter
   grade             Float
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
-  @@unique([semester, quarter, enrolledSubjectId])
+  @@unique([semester, enrolledSubjectId])
   @@map("grades")
 }
 

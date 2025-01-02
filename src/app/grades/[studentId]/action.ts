@@ -7,13 +7,12 @@ import { createServerAction } from "zsa";
 export const addGrade = createServerAction()
   .input(gradeFormSchema)
   .handler(async ({ input }) => {
-    const { enrolledSubjectId, semester, quarter, grade } = input;
+    const { enrolledSubjectId, semester, grade } = input;
 
     await prisma.grade.create({
       data: {
         enrolledSubjectId,
         semester,
-        quarter,
         grade,
       },
     });

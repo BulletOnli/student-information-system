@@ -31,22 +31,31 @@ import { addGrade } from "../action";
 import { useServerAction } from "zsa-react";
 import { toast } from "@/hooks/use-toast";
 import SelectEnrolledSubject from "@/components/SelectEnrolledSubject";
+import { TableCell } from "@/components/ui/table";
+import { Semester } from "@prisma/client";
 
 type Props = {
   studentId: string;
+  grade: number | null;
+  enrolledSubjectId: string;
+  semester: Semester;
 };
 
-export default function AddGradeModal({ studentId }: Props) {
+export default function AddGradeModal({
+  studentId,
+  grade,
+  enrolledSubjectId,
+  semester,
+}: Props) {
   const [open, setOpen] = useState(false);
   const { isPending, execute } = useServerAction(addGrade);
 
   const form = useForm<GradeFormValues>({
     resolver: zodResolver(gradeFormSchema),
     defaultValues: {
-      enrolledSubjectId: "cm5dyu72z001c11m0ptpayak7",
-      semester: "FIRST",
-      quarter: "PRELIMS",
-      grade: 0,
+      enrolledSubjectId,
+      semester,
+      grade: Number(grade) || 0,
     },
   });
 
@@ -88,7 +97,9 @@ export default function AddGradeModal({ studentId }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Grade</Button>
+        <TableCell className="cursor-text border border-gray-200 rounded-md bg-white px-3 py-2 text-left hover:border-gray-300">
+          {grade !== null ? Number(grade) : "-"}
+        </TableCell>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -135,31 +146,6 @@ export default function AddGradeModal({ studentId }: Props) {
             />
             <FormField
               control={form.control}
-              name="quarter"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quarter</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select quarter" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="PRELIMS">Prelims</SelectItem>
-                      <SelectItem value="MIDTERMS">Midterms</SelectItem>
-                      <SelectItem value="FINALS">Finals</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="grade"
               render={({ field }) => (
                 <FormItem>
@@ -168,7 +154,7 @@ export default function AddGradeModal({ studentId }: Props) {
                     <Input
                       type="number"
                       step="0.25"
-                      min="1"
+                      min="0"
                       max="5"
                       {...field}
                       onChange={(e) =>

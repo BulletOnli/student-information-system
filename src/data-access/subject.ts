@@ -47,3 +47,34 @@ export const createCourseSubject = async (
 export const deleteSubject = async (id: string) => {
   return await prisma.subject.delete({ where: { id } });
 };
+
+export const getEnrolledSubjectsWithGrades = async (studentId: string) => {
+  const enrolledSubjects = await prisma.enrolledSubject.findMany({
+    where: { studentId },
+    include: { subject: true, grades: true },
+    orderBy: [{ subject: { code: "asc" } }],
+  });
+
+  const processedSubjects = enrolledSubjects.map((subject) => {
+    const grades: {
+      FIRST: number | null;
+      SECOND: number | null;
+    } = {
+      FIRST: null,
+      SECOND: null,
+    };
+
+    subject.grades.forEach((grade) => {
+      grades[grade.semester] = grade.grade;
+    });
+
+    return {
+      id: subject.id,
+      code: subject.subject.code,
+      title: subject.subject.title,
+      grades,
+    };
+  });
+
+  return processedSubjects;
+};
