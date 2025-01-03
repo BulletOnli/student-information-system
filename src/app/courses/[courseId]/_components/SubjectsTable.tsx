@@ -78,16 +78,6 @@ const SubjectsTable = async ({ courseId }: Props) => {
             </TableBody>
           </Table>
         )}
-
-        {subjects?.length !== 0 && (
-          <Link
-            href={`/courses/${courseId}/subjects`}
-            className="flex items-center gap-1 w-fit mx-auto font-medium my-2 hover:scale-[1.02] ease-in"
-          >
-            <p className="text-center text-sm mx-auto">View Subjects page</p>
-            <ChevronRight className="size-5" />
-          </Link>
-        )}
       </CardContent>
     </Card>
   );

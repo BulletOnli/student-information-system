@@ -80,21 +80,27 @@ const GradesPage = async ({ params }: Props) => {
                       <>
                         <AddGradeModal
                           studentId={params.studentId}
-                          grade={subject.grades.FIRST}
+                          grade={subject.grades.FIRST.grade}
+                          gradeId={subject.grades.FIRST.id}
                           enrolledSubjectId={subject.id}
                           semester="FIRST"
                         />
                         <AddGradeModal
                           studentId={params.studentId}
-                          grade={subject.grades.SECOND}
+                          grade={subject.grades.SECOND.grade}
+                          gradeId={subject.grades.SECOND.id}
                           enrolledSubjectId={subject.id}
                           semester="SECOND"
                         />
                       </>
                     ) : (
                       <>
-                        <TableCell>{subject.grades.FIRST ?? "-"}</TableCell>
-                        <TableCell>{subject.grades.SECOND ?? "-"}</TableCell>
+                        <TableCell>
+                          {subject.grades.FIRST.grade ?? "-"}
+                        </TableCell>
+                        <TableCell>
+                          {subject.grades.SECOND.grade ?? "-"}
+                        </TableCell>
                       </>
                     )}
                   </TableRow>

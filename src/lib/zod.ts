@@ -89,6 +89,7 @@ export const gradeFormSchema = z.object({
   //   required_error: "Please select a quarter",
   // }),
   grade: z.number().min(0).max(5).step(0.25),
+  gradeId: z.string().nullable().optional(),
 });
 
 export type GradeFormValues = z.infer<typeof gradeFormSchema>;

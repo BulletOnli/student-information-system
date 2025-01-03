@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { gradeFormSchema, GradeFormValues } from "@/lib/zod";
-import { addGrade } from "../action";
+import { addGrade, updateGradeAction } from "../action";
 import { useServerAction } from "zsa-react";
 import { toast } from "@/hooks/use-toast";
 import SelectEnrolledSubject from "@/components/SelectEnrolledSubject";
@@ -37,6 +37,7 @@ import { Semester } from "@prisma/client";
 type Props = {
   studentId: string;
   grade: number | null;
+  gradeId: string | null;
   enrolledSubjectId: string;
   semester: Semester;
 };
@@ -46,9 +47,12 @@ export default function AddGradeModal({
   grade,
   enrolledSubjectId,
   semester,
+  gradeId,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const { isPending, execute } = useServerAction(addGrade);
+  const { isPending, execute } = useServerAction(
+    grade ? updateGradeAction : addGrade
+  );
 
   const form = useForm<GradeFormValues>({
     resolver: zodResolver(gradeFormSchema),
@@ -56,6 +60,7 @@ export default function AddGradeModal({
       enrolledSubjectId,
       semester,
       grade: Number(grade) || 0,
+      gradeId: gradeId,
     },
   });
 

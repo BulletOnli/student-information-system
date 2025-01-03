@@ -57,15 +57,22 @@ export const getEnrolledSubjectsWithGrades = async (studentId: string) => {
 
   const processedSubjects = enrolledSubjects.map((subject) => {
     const grades: {
-      FIRST: number | null;
-      SECOND: number | null;
+      FIRST: {
+        id: string | null;
+        grade: number | null;
+      };
+      SECOND: {
+        id: string | null;
+        grade: number | null;
+      };
     } = {
-      FIRST: null,
-      SECOND: null,
+      FIRST: { id: null, grade: null },
+      SECOND: { id: null, grade: null },
     };
 
     subject.grades.forEach((grade) => {
-      grades[grade.semester] = grade.grade;
+      grades[grade.semester]["id"] = grade.id;
+      grades[grade.semester]["grade"] = grade.grade;
     });
 
     return {
